@@ -11,7 +11,7 @@ class MainActivity : Activity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
-		findViewById<FrameLayout>(R.id.pan01).addView(ChessBoard(this))
+//		findViewById<FrameLayout>(R.id.pan01).addView(ChessBoard(this))
 	}
 
 }

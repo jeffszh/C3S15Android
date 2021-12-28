@@ -4,10 +4,16 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.util.AttributeSet
 import android.view.View
 import kotlin.math.min
 
 class ChessBoard(context: Context) : View(context) {
+
+	constructor(context: Context, attributeSet: AttributeSet) : this(context)
+//	constructor(context: Context, attributeSet: AttributeSet, defStyle: Int) : this(
+//		context
+//	)
 
 	private var cellSize = 20
 	private val gridPen = Paint().apply {

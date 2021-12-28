@@ -13,9 +13,8 @@
 		android:layout_height="wrap_content"
 		android:text="Hello World!" />
 
-	<FrameLayout
-		android:id="@+id/pan01"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" />
+	<com.amware.c3s15.ChessBoard
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" />
 
 </LinearLayout>
