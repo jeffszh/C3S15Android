@@ -2,7 +2,7 @@ package com.amware.c3s15
 
 import android.app.Activity
 import android.os.Bundle
-import android.widget.TextView
+import android.widget.FrameLayout
 
 class MainActivity : Activity() {
 
@@ -11,6 +11,7 @@ class MainActivity : Activity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
+		findViewById<FrameLayout>(R.id.pan01).addView(ChessBoard(this))
 	}
 
 }

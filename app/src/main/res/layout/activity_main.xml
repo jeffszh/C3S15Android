@@ -13,57 +13,9 @@
 		android:layout_height="wrap_content"
 		android:text="Hello World!" />
 
-	<com.amware.c3s15.ChessBoard
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:orientation="vertical"
-		android:padding="8dp">
-
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="0dp"
-			android:layout_weight="1"
-			android:baselineAligned="false"
-			android:orientation="horizontal">
-
-			<FrameLayout
-				android:layout_width="0dp"
-				android:layout_height="match_parent"
-				android:layout_weight="1"
-				android:background="@drawable/grid_border" />
-
-			<FrameLayout
-				android:layout_width="0dp"
-				android:layout_height="match_parent"
-				android:layout_weight="1"
-				android:background="@drawable/grid_border" />
-
-			<FrameLayout
-				android:layout_width="0dp"
-				android:layout_height="match_parent"
-				android:layout_weight="1"
-				android:background="@drawable/grid_border" />
-		</LinearLayout>
-
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="0dp"
-			android:layout_weight="1"
-			android:baselineAligned="false"
-			android:orientation="horizontal">
-
-			<FrameLayout
-				android:layout_width="0dp"
-				android:layout_height="match_parent"
-				android:layout_weight="1"
-				android:background="@drawable/grid_border" />
-
-			<FrameLayout
-				android:layout_width="0dp"
-				android:layout_height="match_parent"
-				android:layout_weight="1"
-				android:background="@drawable/grid_border" />
-		</LinearLayout>
-	</com.amware.c3s15.ChessBoard>
+	<FrameLayout
+		android:id="@+id/pan01"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" />
 
 </LinearLayout>
