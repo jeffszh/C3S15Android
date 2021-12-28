@@ -14,7 +14,7 @@
 		android:text="Hello World!" />
 
 	<com.amware.c3s15.ChessBoard
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" />
+		android:layout_width="@dimen/cell_size"
+		android:layout_height="@dimen/cell_size" />
 
 </LinearLayout>
