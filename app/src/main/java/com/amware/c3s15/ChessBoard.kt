@@ -5,10 +5,11 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
-import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
 import kotlin.math.min
 
-class ChessBoard : View {
+class ChessBoard : ViewGroup {
 
 	constructor(context: Context) : super(context)
 	constructor(context: Context, attributeSet: AttributeSet) : super(context, attributeSet)
@@ -21,6 +22,17 @@ class ChessBoard : View {
 		color = Color.BLACK
 		style = Paint.Style.STROKE
 		strokeWidth = 3F
+	}
+
+	private val chessArr = mutableListOf<ImageView>()
+
+	init {
+		repeat(3) {
+			chessArr.add(ImageView(context).also {
+				it.setImageResource(R.drawable.chess_cannon_outline)
+				addView(it)
+			})
+		}
 	}
 
 	override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -47,6 +59,16 @@ class ChessBoard : View {
 			canvas.drawLine(d, 0f, d, width.toFloat(), gridPen)
 			canvas.drawLine(0F, d, width.toFloat(), d, gridPen)
 		}
+	}
+
+	override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+		rearrangeChildren()
+	}
+
+	private fun rearrangeChildren() {
+		chessArr[0].layout(cellSize, 0, cellSize * 2, cellSize)
+		chessArr[1].layout(0, cellSize, cellSize, cellSize * 2)
+		chessArr[2].layout(cellSize * 2, cellSize, cellSize * 3, cellSize * 2)
 	}
 
 }
