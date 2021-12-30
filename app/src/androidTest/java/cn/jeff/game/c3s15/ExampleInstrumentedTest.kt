@@ -1,4 +1,4 @@
-package com.amware.c3s15
+package cn.jeff.game.c3s15
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

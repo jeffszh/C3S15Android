@@ -1,4 +1,4 @@
-package com.amware.c3s15
+package cn.jeff.game.c3s15
 
 import org.junit.Test
 

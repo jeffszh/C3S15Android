@@ -1,8 +1,7 @@
-package com.amware.c3s15
+package cn.jeff.game.c3s15
 
 import android.app.Activity
 import android.os.Bundle
-import android.widget.FrameLayout
 
 class MainActivity : Activity() {
 

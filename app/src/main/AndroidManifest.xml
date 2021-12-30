@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.amware.c3s15">
+	package="cn.jeff.game.c3s15">
 
 	<application
 		android:allowBackup="true"
@@ -10,7 +10,7 @@
 		android:supportsRtl="true"
 		android:theme="@style/Theme.C3S15">
 		<activity
-			android:name=".MainActivity"
+			android:name="cn.jeff.game.c3s15.MainActivity"
 			android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />

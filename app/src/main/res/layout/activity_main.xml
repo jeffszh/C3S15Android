@@ -5,7 +5,7 @@
 	android:layout_height="match_parent"
 	android:gravity="center"
 	android:orientation="vertical"
-	tools:context=".MainActivity">
+	tools:context="cn.jeff.game.c3s15.MainActivity">
 
 	<TextView
 		android:id="@+id/tv01"
@@ -13,7 +13,7 @@
 		android:layout_height="wrap_content"
 		android:text="Hello World!" />
 
-	<com.amware.c3s15.ChessBoard
+	<cn.jeff.game.c3s15.ChessBoard
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:background="@drawable/wood" />
