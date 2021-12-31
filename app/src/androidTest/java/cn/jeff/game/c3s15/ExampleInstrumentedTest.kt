@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
 	fun useAppContext() {
 		// Context of the app under test.
 		val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-		assertEquals("com.amware.c3s15", appContext.packageName)
+		assertEquals("cn.jeff.game.c3s15", appContext.packageName)
 	}
 }

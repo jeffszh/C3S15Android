@@ -1,3 +1,5 @@
 <resources>
 	<string name="app_name">C3S15</string>
+	<string name="cannon_text">貓</string>
+	<string name="soldier_text">鼠</string>
 </resources>
