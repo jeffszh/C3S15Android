@@ -1,15 +1,16 @@
 package cn.jeff.game.c3s15.board
+
+import android.content.Context
+import android.util.AttributeSet
+import android.view.View
+
+class ChessCell : View {
+
+	constructor(context: Context) : super(context)
+	constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+	constructor(context: Context, attrs: AttributeSet, defStyle: Int) :
+			super(context, attrs, defStyle)
 /*
-import javafx.beans.property.SimpleDoubleProperty
-import javafx.beans.property.SimpleObjectProperty
-import javafx.scene.canvas.Canvas
-import javafx.scene.paint.Color
-import javafx.scene.text.Font
-import javafx.scene.text.Text
-import tornadofx.*
-
-class ChessCell : Canvas() {
-
 	companion object {
 		/** 边界留白 */
 		private const val borderPadding = 10.0
@@ -81,6 +82,5 @@ class ChessCell : Canvas() {
 			}
 		}
 	}
-
-}
 */
+}

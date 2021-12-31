@@ -1,17 +1,14 @@
 package cn.jeff.game.c3s15.board
-/*
-import android.app.Application
-import cn.jeff.game.c3s15.R
 
-enum class Chess(val text: String, val color: Color) {
+enum class Chess{
 
-	EMPTY(" ", R.color.black) {
+	EMPTY {
 		override val oppositeSide = EMPTY
 	},
-	SOLDIER(R.string.soldier_text, Color.BLUE) {
+	SOLDIER{
 		override val oppositeSide get() = CANNON
 	},
-	CANNON(GlobalVars.appConf.cannonText, Color.RED) {
+	CANNON{
 		override val oppositeSide = SOLDIER
 	},
 	;
@@ -27,4 +24,3 @@ enum class Chess(val text: String, val color: Color) {
 	abstract val oppositeSide: Chess
 
 }
-*/

@@ -10,7 +10,7 @@
 		android:supportsRtl="true"
 		android:theme="@style/Theme.C3S15">
 		<activity
-			android:name="cn.jeff.game.c3s15.MainActivity"
+			android:name=".MainActivity"
 			android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
