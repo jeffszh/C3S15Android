@@ -1,9 +1,12 @@
 package cn.jeff.game.c3s15
 
+import cn.jeff.game.c3s15.event.ConfigChangedEvent
 import com.google.gson.GsonBuilder
+import org.greenrobot.eventbus.EventBus
 import java.io.FileReader
 import java.io.FileWriter
 import java.io.IOException
+import kotlin.concurrent.thread
 
 /**
  * # 全局变量
@@ -12,12 +15,18 @@ import java.io.IOException
  */
 object GlobalVars {
 
+	private const val LOG_TAG = "GlobalVars"
 	private const val confFilename = "c3s15.conf.json"
 	private val gson = GsonBuilder().setPrettyPrinting().create()
 	var appConf = AppConf()
+		private set
 
 	init {
 		loadConf()
+		thread {
+			Thread.sleep(5000)
+			EventBus.getDefault().post(ConfigChangedEvent(LOG_TAG))
+		}
 	}
 
 	private fun loadConf(filename: String = confFilename) {
