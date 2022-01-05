@@ -60,8 +60,8 @@ class ChessBoard : ViewGroup {
 				getDefaultSize(0, widthMeasureSpec),
 				getDefaultSize(0, heightMeasureSpec)
 		)
-		cellSize = min(measuredWidth, measuredHeight) / 5
-		val childWidthSize = cellSize * 5
+		cellSize = (min(measuredWidth, measuredHeight) / 5.4).toInt()
+		val childWidthSize = (cellSize * 5.4).toInt()
 		val actualSize = MeasureSpec.makeMeasureSpec(childWidthSize, MeasureSpec.EXACTLY)
 		super.onMeasure(actualSize, actualSize)
 	}
@@ -69,10 +69,13 @@ class ChessBoard : ViewGroup {
 	override fun onDraw(canvas: Canvas?) {
 		canvas ?: return
 		super.onDraw(canvas)
-		for (i in 1..4) {
-			val d = (i * cellSize).toFloat()
-			canvas.drawLine(d, 0f, d, width.toFloat(), gridPen)
-			canvas.drawLine(0F, d, width.toFloat(), d, gridPen)
+		for (i in 0..5) {
+			gridPen.strokeWidth = if (i == 0 || i == 5) 5F else 3F
+			val d = ((i + 0.2) * cellSize).toFloat()
+			canvas.drawLine(d, cellSize * 0.2F,
+					d, width.toFloat() - cellSize * 0.2F, gridPen)
+			canvas.drawLine(cellSize * 0.2F, d,
+					width.toFloat() - cellSize * 0.2F, d, gridPen)
 		}
 	}
 
@@ -84,10 +87,10 @@ class ChessBoard : ViewGroup {
 		for (cellY in 0..4) {
 			for (cellX in 0..4) {
 				chessArr[cellY * 5 + cellX].layout(
-						(cellSize * (cellX + 0.1)).toInt(),
-						(cellSize * (cellY + 0.1)).toInt(),
-						(cellSize * (cellX + 0.9)).toInt(),
-						(cellSize * (cellY + 0.9)).toInt()
+						(cellSize * (cellX + 0.3)).toInt(),
+						(cellSize * (cellY + 0.3)).toInt(),
+						(cellSize * (cellX + 1.1)).toInt(),
+						(cellSize * (cellY + 1.1)).toInt()
 				)
 			}
 		}
