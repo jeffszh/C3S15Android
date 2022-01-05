@@ -10,7 +10,9 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup
 import cn.jeff.game.c3s15.board.Chess
+import cn.jeff.game.c3s15.board.ChessBoardContent
 import cn.jeff.game.c3s15.board.ChessCell
+import cn.jeff.game.c3s15.board.LastMoveIndicator
 import kotlin.math.min
 
 class ChessBoard : ViewGroup {
@@ -33,6 +35,8 @@ class ChessBoard : ViewGroup {
 	}
 
 	private val chessArr = mutableListOf<ChessCell>()
+	private val lastMoveIndicator: LastMoveIndicator
+	private var lastMove: ChessBoardContent.Move? = null
 
 	init {
 		repeat(25) {
@@ -48,6 +52,11 @@ class ChessBoard : ViewGroup {
 		chessArr[24].chess = Chess.CANNON
 		chessArr[13].isSelected = true
 		chessArr[22].isSelected = true
+
+		lastMoveIndicator = LastMoveIndicator(context)
+		addView(lastMoveIndicator)
+		lastMove = ChessBoardContent.Move(2, 2, 2, 4)
+		updateLastMove()
 	}
 
 	override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -61,6 +70,7 @@ class ChessBoard : ViewGroup {
 				getDefaultSize(0, heightMeasureSpec)
 		)
 		cellSize = (min(measuredWidth, measuredHeight) / 5.4).toInt()
+		updateLastMove()
 		val childWidthSize = (cellSize * 5.4).toInt()
 		val actualSize = MeasureSpec.makeMeasureSpec(childWidthSize, MeasureSpec.EXACTLY)
 		super.onMeasure(actualSize, actualSize)
@@ -98,6 +108,12 @@ class ChessBoard : ViewGroup {
 //				(cellSize * 1.8).toInt(), (cellSize * 0.8).toInt())
 //		chessArr[1].layout(0, cellSize, cellSize, cellSize * 2)
 //		chessArr[2].layout(cellSize * 2, cellSize, cellSize * 3, cellSize * 2)
+	}
+
+	private fun updateLastMove() {
+		lastMove?.apply {
+			lastMoveIndicator.setPosition(fromX, fromY, toX, toY, cellSize)
+		} ?: lastMoveIndicator.hide()
 	}
 
 	@SuppressLint("ClickableViewAccessibility")

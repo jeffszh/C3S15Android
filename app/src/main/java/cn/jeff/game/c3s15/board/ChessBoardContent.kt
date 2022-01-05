@@ -1,5 +1,11 @@
 package cn.jeff.game.c3s15.board
 
+class ChessBoardContent {
+
+	class Move(val fromX: Int, val fromY: Int, val toX: Int, val toY: Int)
+
+}
+
 /*
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleBooleanProperty
