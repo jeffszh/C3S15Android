@@ -35,15 +35,19 @@ class ChessBoard : ViewGroup {
 	private val chessArr = mutableListOf<ChessCell>()
 
 	init {
-		repeat(3) { ind ->
+		repeat(25) {
 			chessArr.add(ChessCell(context).also {
-				if (ind == 1) {
-					it.isSelected = true
-				}
-				it.chess = Chess.CANNON
 				addView(it)
 			})
 		}
+		repeat(15) { ind ->
+			chessArr[ind].chess = Chess.SOLDIER
+		}
+		chessArr[20].chess = Chess.CANNON
+		chessArr[22].chess = Chess.CANNON
+		chessArr[24].chess = Chess.CANNON
+		chessArr[13].isSelected = true
+		chessArr[22].isSelected = true
 	}
 
 	override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -77,10 +81,20 @@ class ChessBoard : ViewGroup {
 	}
 
 	private fun rearrangeChildren() {
-		chessArr[0].layout((cellSize * 1.2).toInt(), (cellSize * 0.2).toInt(),
-				(cellSize * 1.8).toInt(), (cellSize * 0.8).toInt())
-		chessArr[1].layout(0, cellSize, cellSize, cellSize * 2)
-		chessArr[2].layout(cellSize * 2, cellSize, cellSize * 3, cellSize * 2)
+		for (cellY in 0..4) {
+			for (cellX in 0..4) {
+				chessArr[cellY * 5 + cellX].layout(
+						(cellSize * (cellX + 0.1)).toInt(),
+						(cellSize * (cellY + 0.1)).toInt(),
+						(cellSize * (cellX + 0.9)).toInt(),
+						(cellSize * (cellY + 0.9)).toInt()
+				)
+			}
+		}
+//		chessArr[0].layout((cellSize * 1.2).toInt(), (cellSize * 0.2).toInt(),
+//				(cellSize * 1.8).toInt(), (cellSize * 0.8).toInt())
+//		chessArr[1].layout(0, cellSize, cellSize, cellSize * 2)
+//		chessArr[2].layout(cellSize * 2, cellSize, cellSize * 3, cellSize * 2)
 	}
 
 	@SuppressLint("ClickableViewAccessibility")

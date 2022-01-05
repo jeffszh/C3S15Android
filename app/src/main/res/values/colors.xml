@@ -9,5 +9,5 @@
 	<color name="white">#FFFFFFFF</color>
 	<color name="cannon_color">#F00</color>
 	<color name="soldier_color">#00F</color>
-	<color name="focus_color">#F0C</color>
+	<color name="focus_color">#0F0</color>
 </resources>

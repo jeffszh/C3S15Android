@@ -29,10 +29,10 @@ class ChessCell : View {
 		updateBackground()
 	}
 
-	private fun updateBackground(){
+	private fun updateBackground() {
 		setBackgroundResource(when (chess) {
 			Chess.EMPTY -> 0
-			Chess.SOLDIER -> R.drawable.chess_soldier_outline
+			Chess.SOLDIER -> R.drawable.chess_soldier_outline2
 			Chess.CANNON -> R.drawable.chess_cannon_outline2
 		})
 	}
@@ -51,7 +51,20 @@ class ChessCell : View {
 		super.onDraw(canvas)
 		canvas ?: return
 //		resources.getDrawable(R.drawable.chess_cannon_outline, null).draw(canvas)
-		canvas.drawText("炮", cellSize * 0.2F, cellSize * 0.72F, paint)
+		@Suppress("DEPRECATION")
+		paint.color = resources.getColor(when (chess) {
+			Chess.EMPTY -> R.color.black
+			Chess.SOLDIER -> R.color.soldier_color
+			Chess.CANNON -> R.color.cannon_color
+		})
+		when (chess) {
+			Chess.EMPTY -> null
+			Chess.SOLDIER -> R.string.soldier_text
+			Chess.CANNON -> R.string.cannon_text
+		}?.also { chessTextRes ->
+			canvas.drawText(resources.getText(chessTextRes).toString(),
+					cellSize * 0.2F, cellSize * 0.72F, paint)
+		}
 	}
 
 /*

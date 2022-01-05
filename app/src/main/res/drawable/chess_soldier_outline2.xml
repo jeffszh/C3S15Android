@@ -8,7 +8,7 @@
 				android:startColor="#eee" />
 			<stroke
 				android:width="3dp"
-				android:color="@color/cannon_color" />
+				android:color="@color/soldier_color" />
 		</shape>
 	</item>
 	<item>
