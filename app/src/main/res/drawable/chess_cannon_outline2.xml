@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+	<item>
+		<selector>
+			<item android:state_selected="true">
+				<shape android:shape="rectangle">
+					<stroke
+						android:width="2dp"
+						android:color="@color/focus_color" />
+				</shape>
+			</item>
+		</selector>
+	</item>
+	<item>
+		<shape android:shape="oval">
+			<gradient
+				android:centerColor="#fff"
+				android:endColor="#ccc"
+				android:startColor="#eee" />
+			<stroke
+				android:width="3dp"
+				android:color="@color/cannon_color" />
+		</shape>
+	</item>
+</layer-list>

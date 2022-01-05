@@ -9,7 +9,8 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup
-import android.widget.ImageView
+import cn.jeff.game.c3s15.board.Chess
+import cn.jeff.game.c3s15.board.ChessCell
 import kotlin.math.min
 
 class ChessBoard : ViewGroup {
@@ -17,7 +18,7 @@ class ChessBoard : ViewGroup {
 	constructor(context: Context) : super(context)
 	constructor(context: Context, attributeSet: AttributeSet) : super(context, attributeSet)
 	constructor(context: Context, attributeSet: AttributeSet, defStyle: Int) : super(
-		context, attributeSet, defStyle
+			context, attributeSet, defStyle
 	)
 
 	companion object {
@@ -31,12 +32,15 @@ class ChessBoard : ViewGroup {
 		strokeWidth = 3F
 	}
 
-	private val chessArr = mutableListOf<ImageView>()
+	private val chessArr = mutableListOf<ChessCell>()
 
 	init {
-		repeat(3) {
-			chessArr.add(ImageView(context).also {
-				it.setImageResource(R.drawable.chess_cannon_outline)
+		repeat(3) { ind ->
+			chessArr.add(ChessCell(context).also {
+				if (ind == 1) {
+					it.isSelected = true
+				}
+				it.chess = Chess.CANNON
 				addView(it)
 			})
 		}
@@ -49,8 +53,8 @@ class ChessBoard : ViewGroup {
 //		setMeasuredDimension(200, 200)
 
 		setMeasuredDimension(
-			getDefaultSize(0, widthMeasureSpec),
-			getDefaultSize(0, heightMeasureSpec)
+				getDefaultSize(0, widthMeasureSpec),
+				getDefaultSize(0, heightMeasureSpec)
 		)
 		cellSize = min(measuredWidth, measuredHeight) / 5
 		val childWidthSize = cellSize * 5
@@ -73,7 +77,8 @@ class ChessBoard : ViewGroup {
 	}
 
 	private fun rearrangeChildren() {
-		chessArr[0].layout(cellSize, 0, cellSize * 2, cellSize)
+		chessArr[0].layout((cellSize * 1.2).toInt(), (cellSize * 0.2).toInt(),
+				(cellSize * 1.8).toInt(), (cellSize * 0.8).toInt())
 		chessArr[1].layout(0, cellSize, cellSize, cellSize * 2)
 		chessArr[2].layout(cellSize * 2, cellSize, cellSize * 3, cellSize * 2)
 	}
