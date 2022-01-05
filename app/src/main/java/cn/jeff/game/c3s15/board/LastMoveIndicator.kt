@@ -6,7 +6,6 @@ import androidx.core.view.isVisible
 import cn.jeff.game.c3s15.R
 import kotlin.math.abs
 import kotlin.math.max
-import kotlin.math.min
 
 /**
  * # 顯示之前一步棋的箭頭
@@ -33,31 +32,30 @@ class LastMoveIndicator(context: Context) : AppCompatImageView(context) {
 	 * @param cellSize 棋盤格的大小，同[cn.jeff.game.c3s15.ChessBoard.cellSize]。
 	 */
 	fun setPosition(fromX: Int, fromY: Int, toX: Int, toY: Int, cellSize: Int) {
-		val alterX: Double
-		val alterY: Double
+		// 先計算箭頭的長度
+		val arrowLength = max(abs(fromX - toX), abs(fromY - toY))
+		// 然後計算中心位置
+		val pivotX = (fromX + toX) / 2.0
+		val pivotY = (fromY + toY) / 2.0
+
+		// 計算旋轉角度
 		rotation = if (fromX == toX) {
-			alterX = 0.0
-			alterY = 0.5
 			if (fromY < toY)
 				90F
 			else
 				270F
 		} else {
-			alterX = 0.5
-			alterY = 0.0
 			if (fromX < toX)
 				0F
 			else
 				180F
 		}
-		val minX = min(fromX, toX)
-		val minY = min(fromY, toY)
-		val dx = abs(toX - fromX)
-		val dy = abs(toY - fromY)
-		val posLeft = (minX + 0.2 + alterX) * cellSize
-		val posTop = (minY + 0.2 + alterY) * cellSize
-		val posRight = posLeft + max(1, dx) * cellSize
-		val posBottom = posTop + max(1, dy) * cellSize
+
+		// 實際上總是定好位置后，再圍繞中心旋轉的，所以是計算旋轉前的位置才正確。
+		val posLeft = (pivotX - arrowLength / 2.0 + 0.7) * cellSize
+		val posTop = (pivotY - 0.5 + 0.7) * cellSize
+		val posRight = (pivotX + arrowLength / 2.0 + 0.7) * cellSize
+		val posBottom = (pivotY + 0.5 + 0.7) * cellSize
 		layout(posLeft.toInt(), posTop.toInt(), posRight.toInt(), posBottom.toInt())
 		isVisible = true
 		invalidate()
