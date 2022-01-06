@@ -3,8 +3,8 @@ package cn.jeff.game.c3s15
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
 import cn.jeff.game.c3s15.event.ConfigChangedEvent
+import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -21,7 +21,7 @@ class MainActivity : Activity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
 //		findViewById<FrameLayout>(R.id.pan01).addView(ChessBoard(this))
-		val tv01 = findViewById<TextView>(R.id.tv01)
+//		val tv01 = findViewById<TextView>(R.id.tv01)
 		tv01.text = GlobalVars.appConf.mainTitle
 	}
 
@@ -38,7 +38,8 @@ class MainActivity : Activity() {
 	@Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
 	fun onConfChanged(event: ConfigChangedEvent) {
 		Log.d(LOG_TAG, "配置改變，起因=${event.reason}。")
-		findViewById<ChessBoard>(R.id.chessBoard).invalidate()
+//		findViewById<ChessBoard>(R.id.chessBoard).invalidate()
+		chessBoard.invalidate()
 	}
 
 }
