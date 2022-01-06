@@ -63,7 +63,7 @@ class MainActivity : Activity() {
 	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
-	fun onChessBoardContentChanged(event:ChessBoardContentChangedEvent){
+	fun onChessBoardContentChanged(event: ChessBoardContentChangedEvent) {
 		updateStatusText2(event.chessBoardContent)
 	}
 
@@ -76,7 +76,7 @@ class MainActivity : Activity() {
 		}
 	}
 
-	private fun updateStatusText1(){
+	private fun updateStatusText1() {
 		val status1 = "$cannonText：${
 			if (GlobalVars.cannonsUseAI) "電腦" else "人腦"
 		}  $soldierText：${

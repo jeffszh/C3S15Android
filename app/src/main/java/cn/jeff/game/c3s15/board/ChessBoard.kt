@@ -9,9 +9,12 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup
+import android.widget.Toast
+import cn.jeff.game.c3s15.GlobalVars
 import cn.jeff.game.c3s15.event.ChessBoardContentChangedEvent
 import org.greenrobot.eventbus.EventBus
 import kotlin.concurrent.thread
+import kotlin.math.floor
 import kotlin.math.min
 
 /**
@@ -70,7 +73,7 @@ class ChessBoard : ViewGroup {
 
 		lastMoveIndicator = LastMoveIndicator(context)
 		addView(lastMoveIndicator)
-		chessBoardContent.lastMove = ChessBoardContent.Move(2, 2, 2, 4)
+		// chessBoardContent.lastMove = ChessBoardContent.Move(2, 2, 2, 4)
 		updateLastMove()
 	}
 
@@ -151,19 +154,44 @@ class ChessBoard : ViewGroup {
 
 	@SuppressLint("ClickableViewAccessibility")
 	override fun onTouchEvent(event: MotionEvent?): Boolean {
-		when (event?.action) {
+		event ?: return false
+		val (cellX, cellY) = mouseXyToChessBoardXy(event.x, event.y)
+		when (event.action) {
 			MotionEvent.ACTION_DOWN -> {
-				Log.d(LOG_TAG, "=============down====${event.x}====${event.y}=====")
+				Log.d(LOG_TAG, "=============down====${cellX}====${cellY}=====")
 			}
 			MotionEvent.ACTION_MOVE -> {
-				Log.d(LOG_TAG, "=============move====${event.x}====${event.y}=====")
+				Log.d(LOG_TAG, "=============move====${cellX}====${cellY}=====")
 			}
 			MotionEvent.ACTION_UP -> {
-				Log.d(LOG_TAG, "=============up====${event.x}====${event.y}=====")
+				Log.d(LOG_TAG, "=============up====${cellX}====${cellY}=====")
 			}
 			else -> return super.onTouchEvent(event)
 		}
 		return true
+	}
+
+	fun applyMove(move: ChessBoardContent.Move) {
+		chessBoardContent.applyMove(move)
+		lastMoveIndicator.bringToFront()
+		rearrangeChildren()
+		showDialogIfGameOver()
+	}
+
+	private fun mouseXyToChessBoardXy(mX: Float, mY: Float) = listOf(
+		floor(mX / cellSize - 0.2F).toInt(),
+		floor(mY / cellSize - 0.2F).toInt()
+	)
+
+	private fun showDialogIfGameOver() {
+		if (chessBoardContent.gameOver) {
+			val winSideText = if (chessBoardContent.isCannonsWin)
+				GlobalVars.appConf.cannonText
+			else
+				GlobalVars.appConf.soldierText
+			// 安卓中顯示對話框不容易，改為Toast。
+			Toast.makeText(context, "【$winSideText】获胜！", Toast.LENGTH_LONG).show()
+		}
 	}
 
 }
