@@ -9,19 +9,34 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup
+import cn.jeff.game.c3s15.event.ChessBoardContentChangedEvent
+import org.greenrobot.eventbus.EventBus
+import kotlin.concurrent.thread
 import kotlin.math.min
 
+/**
+ * # 棋盘
+ *
+ * 用于下棋的场所，在主窗口的中部显示。
+ */
 class ChessBoard : ViewGroup {
 
 	constructor(context: Context) : super(context)
 	constructor(context: Context, attributeSet: AttributeSet) : super(context, attributeSet)
 	constructor(context: Context, attributeSet: AttributeSet, defStyle: Int) : super(
-			context, attributeSet, defStyle
+		context, attributeSet, defStyle
 	)
 
 	companion object {
 		private val LOG_TAG = ChessBoard::class.simpleName
 	}
+
+//	private val mainActivity
+//		get() = MainActivity.instance!!
+//	private val cannonText
+//		get() = GlobalVars.appConf.cannonText
+//	private val soldierText
+//		get() = GlobalVars.appConf.soldierText
 
 	private var cellSize = 20
 	private val gridPen = Paint().apply {
@@ -32,7 +47,8 @@ class ChessBoard : ViewGroup {
 
 	private val chessArr = mutableListOf<ChessCell>()
 	private val lastMoveIndicator: LastMoveIndicator
-	private var lastMove: ChessBoardContent.Move? = null
+	private val chessBoardContent = ChessBoardContent()
+	// private var lastMove: ChessBoardContent.Move? = null
 
 	init {
 		repeat(25) {
@@ -40,19 +56,36 @@ class ChessBoard : ViewGroup {
 				addView(it)
 			})
 		}
-		repeat(15) { ind ->
-			chessArr[ind].chess = Chess.SOLDIER
-		}
-		chessArr[20].chess = Chess.CANNON
-		chessArr[22].chess = Chess.CANNON
-		chessArr[24].chess = Chess.CANNON
-		chessArr[13].isSelected = true
-		chessArr[22].isSelected = true
+//		repeat(15) { ind ->
+//			chessArr[ind].chess = Chess.SOLDIER
+//		}
+//		chessArr[20].chess = Chess.CANNON
+//		chessArr[22].chess = Chess.CANNON
+//		chessArr[24].chess = Chess.CANNON
+//		chessArr[13].isSelected = true
+//		chessArr[22].isSelected = true
+
+		chessBoardContent.setInitialContent()
+		applyChessboardContent()
 
 		lastMoveIndicator = LastMoveIndicator(context)
 		addView(lastMoveIndicator)
-		lastMove = ChessBoardContent.Move(2, 2, 2, 4)
+		chessBoardContent.lastMove = ChessBoardContent.Move(2, 2, 2, 4)
 		updateLastMove()
+	}
+
+	private fun applyChessboardContent() {
+		for (cellY in 0..4) {
+			for (cellX in 0..4) {
+				chessArr[cellX + cellY * 5].chess =
+					chessBoardContent[cellX, cellY] ?: error("不可能！")
+			}
+		}
+		thread {
+			Thread.sleep(1000)
+			EventBus.getDefault().post(ChessBoardContentChangedEvent(chessBoardContent))
+		}
+		invalidate()
 	}
 
 	override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -62,8 +95,8 @@ class ChessBoard : ViewGroup {
 //		setMeasuredDimension(200, 200)
 
 		setMeasuredDimension(
-				getDefaultSize(0, widthMeasureSpec),
-				getDefaultSize(0, heightMeasureSpec)
+			getDefaultSize(0, widthMeasureSpec),
+			getDefaultSize(0, heightMeasureSpec)
 		)
 		cellSize = (min(measuredWidth, measuredHeight) / 5.4).toInt()
 		updateLastMove()
@@ -78,10 +111,14 @@ class ChessBoard : ViewGroup {
 		for (i in 0..5) {
 			gridPen.strokeWidth = if (i == 0 || i == 5) 5F else 3F
 			val d = ((i + 0.2) * cellSize).toFloat()
-			canvas.drawLine(d, cellSize * 0.2F,
-					d, width.toFloat() - cellSize * 0.2F, gridPen)
-			canvas.drawLine(cellSize * 0.2F, d,
-					width.toFloat() - cellSize * 0.2F, d, gridPen)
+			canvas.drawLine(
+				d, cellSize * 0.2F,
+				d, width.toFloat() - cellSize * 0.2F, gridPen
+			)
+			canvas.drawLine(
+				cellSize * 0.2F, d,
+				width.toFloat() - cellSize * 0.2F, d, gridPen
+			)
 		}
 	}
 
@@ -93,10 +130,10 @@ class ChessBoard : ViewGroup {
 		for (cellY in 0..4) {
 			for (cellX in 0..4) {
 				chessArr[cellY * 5 + cellX].layout(
-						(cellSize * (cellX + 0.3)).toInt(),
-						(cellSize * (cellY + 0.3)).toInt(),
-						(cellSize * (cellX + 1.1)).toInt(),
-						(cellSize * (cellY + 1.1)).toInt()
+					(cellSize * (cellX + 0.3)).toInt(),
+					(cellSize * (cellY + 0.3)).toInt(),
+					(cellSize * (cellX + 1.1)).toInt(),
+					(cellSize * (cellY + 1.1)).toInt()
 				)
 			}
 		}
@@ -107,7 +144,7 @@ class ChessBoard : ViewGroup {
 	}
 
 	private fun updateLastMove() {
-		lastMove?.apply {
+		chessBoardContent.lastMove?.apply {
 			lastMoveIndicator.setPosition(fromX, fromY, toX, toY, cellSize)
 		} ?: lastMoveIndicator.hide()
 	}

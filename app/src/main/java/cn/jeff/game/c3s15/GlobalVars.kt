@@ -24,7 +24,7 @@ object GlobalVars {
 	init {
 		loadConf()
 		thread {
-			Thread.sleep(5000)
+			Thread.sleep(500)
 			EventBus.getDefault().post(ConfigChangedEvent(LOG_TAG))
 		}
 	}
@@ -44,6 +44,10 @@ object GlobalVars {
 			gson.toJson(appConf, writer)
 		}
 	}
+
+	var cannonsUseAI = false
+	var soldiersUseAI = true
+	var aiTraversalCount = 0
 
 //	val cannonsUseAIProperty = SimpleBooleanProperty(false)
 //	var cannonsUseAI: Boolean

@@ -6,12 +6,12 @@ package cn.jeff.game.c3s15.board
  * 之所以单独将此类抽出来，是为了方便日后做AI计算。
  * 此类包含棋盘的当前局面和上一步棋，这两个信息在[ChessBoard]上面也必然要有，
  * 但[ChessBoard]上的内容会在界面上显示出来，
- * 而这里的内容如果没执行[attachToChessCells]之类，则可以用于安静的计算。
+ * 而单独的[ChessBoardContent]，则可以用于安静的计算。
  */
 class ChessBoardContent {
 
 	private val chessList = MutableList(25) { Chess.EMPTY }
-	private var lastMove: Move? = null
+	var lastMove: Move? = null
 	private var moveCount = 0
 	val isCannonsTurn get() = (moveCount % 2) == 0
 	var gameOver = false

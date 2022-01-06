@@ -1,5 +1,7 @@
 <resources>
 	<string name="app_name">C3S15</string>
-	<string name="cannon_text">貓</string>
-	<string name="soldier_text">鼠</string>
+	<string name="cannon_text_unused">貓</string>
+	<string name="soldier_text_unused">鼠</string>
+	<string name="restart_game">重新开始</string>
+	<string name="settings">设置</string>
 </resources>

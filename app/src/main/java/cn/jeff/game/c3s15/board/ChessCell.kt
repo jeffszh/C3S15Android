@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import cn.jeff.game.c3s15.GlobalVars
 import cn.jeff.game.c3s15.R
 
 class ChessCell : View {
@@ -30,11 +31,13 @@ class ChessCell : View {
 	}
 
 	private fun updateBackground() {
-		setBackgroundResource(when (chess) {
-			Chess.EMPTY -> 0
-			Chess.SOLDIER -> R.drawable.chess_soldier_outline2
-			Chess.CANNON -> R.drawable.chess_cannon_outline2
-		})
+		setBackgroundResource(
+			when (chess) {
+				Chess.EMPTY -> 0
+				Chess.SOLDIER -> R.drawable.chess_soldier_outline2
+				Chess.CANNON -> R.drawable.chess_cannon_outline2
+			}
+		)
 	}
 
 	override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
@@ -52,18 +55,19 @@ class ChessCell : View {
 		canvas ?: return
 //		resources.getDrawable(R.drawable.chess_cannon_outline, null).draw(canvas)
 		@Suppress("DEPRECATION")
-		paint.color = resources.getColor(when (chess) {
-			Chess.EMPTY -> R.color.black
-			Chess.SOLDIER -> R.color.soldier_color
-			Chess.CANNON -> R.color.cannon_color
-		})
+		paint.color = resources.getColor(
+			when (chess) {
+				Chess.EMPTY -> R.color.black
+				Chess.SOLDIER -> R.color.soldier_color
+				Chess.CANNON -> R.color.cannon_color
+			}
+		)
 		when (chess) {
 			Chess.EMPTY -> null
-			Chess.SOLDIER -> R.string.soldier_text
-			Chess.CANNON -> R.string.cannon_text
-		}?.also { chessTextRes ->
-			canvas.drawText(resources.getText(chessTextRes).toString(),
-					cellSize * 0.2F, cellSize * 0.72F, paint)
+			Chess.SOLDIER -> GlobalVars.appConf.soldierText
+			Chess.CANNON -> GlobalVars.appConf.cannonText
+		}?.also { chessText ->
+			canvas.drawText(chessText, cellSize * 0.2F, cellSize * 0.72F, paint)
 		}
 	}
 
