@@ -1,4 +1,4 @@
-package cn.jeff.game.c3s15
+package cn.jeff.game.c3s15.board
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,10 +9,6 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup
-import cn.jeff.game.c3s15.board.Chess
-import cn.jeff.game.c3s15.board.ChessBoardContent
-import cn.jeff.game.c3s15.board.ChessCell
-import cn.jeff.game.c3s15.board.LastMoveIndicator
 import kotlin.math.min
 
 class ChessBoard : ViewGroup {

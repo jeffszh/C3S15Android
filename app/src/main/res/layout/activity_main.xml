@@ -13,7 +13,7 @@
 		android:layout_height="wrap_content"
 		android:text="Hello World!" />
 
-	<cn.jeff.game.c3s15.ChessBoard
+	<cn.jeff.game.c3s15.board.ChessBoard
 		android:id="@+id/chessBoard"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"

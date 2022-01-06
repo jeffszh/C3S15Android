@@ -29,7 +29,7 @@ class LastMoveIndicator(context: Context) : AppCompatImageView(context) {
 	 * @param toY
 	 * 所有坐標參數是棋盤格的坐標，範圍0-4。
 	 *
-	 * @param cellSize 棋盤格的大小，同[cn.jeff.game.c3s15.ChessBoard.cellSize]。
+	 * @param cellSize 棋盤格的大小，同[ChessBoard.cellSize]。
 	 */
 	fun setPosition(fromX: Int, fromY: Int, toX: Int, toY: Int, cellSize: Int) {
 		// 先計算箭頭的長度

@@ -1,18 +1,5 @@
 package cn.jeff.game.c3s15.board
 
-class ChessBoardContent {
-
-	class Move(val fromX: Int, val fromY: Int, val toX: Int, val toY: Int)
-
-}
-
-/*
-import javafx.beans.property.ObjectProperty
-import javafx.beans.property.SimpleBooleanProperty
-import javafx.beans.property.SimpleIntegerProperty
-import javafx.beans.property.SimpleObjectProperty
-import tornadofx.*
-
 /**
  * # 棋盘的内容
  *
@@ -23,13 +10,11 @@ import tornadofx.*
  */
 class ChessBoardContent {
 
-	private val chessList = List(25) { Chess.EMPTY }.toObservable()
-	private val lastMove = SimpleObjectProperty<Move>(null)
-	val moveCountProperty = SimpleIntegerProperty(0)
-	private var moveCount by moveCountProperty
+	private val chessList = MutableList(25) { Chess.EMPTY }
+	private var lastMove: Move? = null
+	private var moveCount = 0
 	val isCannonsTurn get() = (moveCount % 2) == 0
-	val gameOverProperty = SimpleBooleanProperty(false)
-	var gameOver by gameOverProperty
+	var gameOver = false
 	val isCannonsWin get() = gameOver && !isCannonsTurn
 
 	operator fun get(x: Int, y: Int) = if (x in 0..4 && y in 0..4) chessList[x + y * 5] else null
@@ -40,6 +25,9 @@ class ChessBoardContent {
 		}
 	}
 
+	/**
+	 * # 棋步
+	 */
 	class Move(val fromX: Int, val fromY: Int, val toX: Int, val toY: Int)
 
 	/**
@@ -57,8 +45,9 @@ class ChessBoardContent {
 		val content = str.map { c ->
 			Chess.values()[c.toString().toInt()]
 		}
-		chessList.setAll(content)
-		lastMove.value = null
+		chessList.clear()
+		chessList.addAll(content)
+		lastMove = null
 		moveCount = 0
 		gameOver = false
 
@@ -67,34 +56,40 @@ class ChessBoardContent {
 		println("压缩=$compress")
 		val decompress = decompressFromInt64(compress)
 		decompress.forEachIndexed { index, chess ->
-			print(chess.text)
+			print(
+				when (chess) {
+					Chess.EMPTY -> "　"
+					Chess.SOLDIER -> "兵"
+					Chess.CANNON -> "炮"
+				}
+			)
 			if (index % 5 == 4) {
 				println()
 			}
 		}
 	}
 
-	/**
-	 * 关联到界面上的棋盘格
-	 *
-	 * @param chessCells 用于在界面上显示的棋盘格
-	 */
-	fun attachToChessCells(chessCells: List<ChessCell>) {
-		chessList.onChange {
-			chessCells.forEachIndexed { index, chessCell ->
-				chessCell.chessProperty.value = chessList[index]
-			}
-		}
-	}
+//	/**
+//	 * 关联到界面上的棋盘格
+//	 *
+//	 * @param chessCells 用于在界面上显示的棋盘格
+//	 */
+//	fun attachToChessCells(chessCells: List<ChessCell>) {
+//		chessList.onChange {
+//			chessCells.forEachIndexed { index, chessCell ->
+//				chessCell.chessProperty.value = chessList[index]
+//			}
+//		}
+//	}
 
-	/**
-	 * 关联到界面上的“上一步棋”
-	 *
-	 * @param uiLastMove 在界面上显示的“上一步棋”
-	 */
-	fun attachToLastMove(uiLastMove: ObjectProperty<Move>) {
-		lastMove.bindBidirectional(uiLastMove)
-	}
+//	/**
+//	 * 关联到界面上的“上一步棋”
+//	 *
+//	 * @param uiLastMove 在界面上显示的“上一步棋”
+//	 */
+//	fun attachToLastMove(uiLastMove: ObjectProperty<Move>) {
+//		lastMove.bindBidirectional(uiLastMove)
+//	}
 
 	private fun compressToInt64(chessList: List<Chess>): Long {
 		var result = 0L
@@ -146,7 +141,7 @@ class ChessBoardContent {
 		if (isMoveValid(move)) {
 			this[move.toX, move.toY] = this[move.fromX, move.fromY]!!
 			this[move.fromX, move.fromY] = Chess.EMPTY
-			lastMove.value = move
+			lastMove = move
 			moveCount++
 			gameOver = livingSoldierCount() == 0 || cannonBreathCount() == 0
 		}
@@ -180,9 +175,9 @@ class ChessBoardContent {
 		}.count()
 
 	fun clone() = ChessBoardContent().also {
-		it.chessList.setAll(chessList)
+		it.chessList.clear()
+		it.chessList.addAll(chessList)
 		it.moveCount = moveCount
 	}
 
 }
-*/
