@@ -35,6 +35,9 @@ class MainActivity : Activity() {
 
 	override fun onStart() {
 		super.onStart()
+		val fn = getExternalFilesDir(null)!!.path + "/" + GlobalVars.confFilename
+		GlobalVars.loadConf(fn)
+		GlobalVars.saveConf(fn)
 		EventBus.getDefault().register(this)
 	}
 
@@ -95,6 +98,7 @@ class MainActivity : Activity() {
 			GlobalVars.soldiersPlayerType.text
 		}"
 		tv02.text = status1
+		tv01.text = GlobalVars.appConf.mainTitle
 	}
 
 	private fun updateStatusText2(chessBoardContent: ChessBoardContent) {
