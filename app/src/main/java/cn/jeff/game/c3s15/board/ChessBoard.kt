@@ -175,43 +175,70 @@ class ChessBoard : ViewGroup {
 	@SuppressLint("ClickableViewAccessibility")
 	override fun onTouchEvent(event: MotionEvent?): Boolean {
 		event ?: return false
+		// 若不是轮到玩家操作，直接返回。
+		if (when (chessBoardContent.whoseTurn) {
+				Chess.EMPTY -> true
+				Chess.SOLDIER -> GlobalVars.soldiersPlayerType != PlayerType.HUMAN
+				Chess.CANNON -> GlobalVars.cannonsPlayerType != PlayerType.HUMAN
+			}
+		) return false
 		val (cellX, cellY) = mouseXyToChessBoardXy(event.x, event.y)
 		when (event.action) {
 			MotionEvent.ACTION_DOWN -> {
 				Log.d(LOG_TAG, "=============down====${cellX}====${cellY}=====")
 				if (isClickBehavior) {
+					isClickBehavior = false
+					mouseDownCellPos?.also { mdp ->
+						applyMove(ChessBoardContent.Move(mdp.x, mdp.y, cellX, cellY))
+					}
+					mouseDownCellPos = null
 				} else {
-//					if (if (chessBoardContent.isCannonsTurn) {
-//							GlobalVars.cannonsPlayerType == PlayerType.HUMAN
-//						} else {
-//							GlobalVars.soldiersPlayerType == PlayerType.HUMAN
-//						}
-//					) {
-//						if (chessBoardContent[cellX, cellY] ==
-//							if (chessBoardContent.isCannonsTurn) {
-//								Chess.CANNON
-//							} else {
-//								Chess.SOLDIER
-//							}
-//						) {
-//						}
-//					}
+					if (chessBoardContent[cellX, cellY] == chessBoardContent.whoseTurn) {
+						mouseDownCellPos = Point(cellX, cellY)
+						isClickBehavior = true
+					}
 				}
 			}
 			MotionEvent.ACTION_MOVE -> {
 				Log.d(LOG_TAG, "=============move====${cellX}====${cellY}=====")
+				mouseDownCellPos?.also { mdp ->
+					if (isClickBehavior) {
+						if (mdp.x != cellX || mdp.y != cellY) {
+							isClickBehavior = false
+						}
+					}
+					val draggingCell = chessArr[mdp.x + mdp.y * 5]
+					draggingCell.layout(
+						(event.x - cellSize * 0.5).toInt(),
+						(event.y - cellSize * 0.5).toInt(),
+						(event.x + cellSize * 0.5).toInt(),
+						(event.y + cellSize * 0.5).toInt(),
+					)
+					draggingCell.bringToFront()
+					draggingCell.invalidate()
+					invalidate()
+				}
 			}
 			MotionEvent.ACTION_UP -> {
 				Log.d(LOG_TAG, "=============up====${cellX}====${cellY}=====")
+				mouseDownCellPos?.also { mdp ->
+					if (!isClickBehavior) {
+						applyMove(ChessBoardContent.Move(mdp.x, mdp.y, cellX, cellY))
+						isClickBehavior = false
+						mouseDownCellPos = null
+					}
+				}
 			}
 			else -> return super.onTouchEvent(event)
 		}
 		return true
 	}
 
-	fun applyMove(move: ChessBoardContent.Move) {
+	private fun applyMove(move: ChessBoardContent.Move) {
 		chessBoardContent.applyMove(move)
+		applyChessboardContent()
 		lastMoveIndicator.bringToFront()
+		updateLastMove()
 		rearrangeChildren()
 		showDialogIfGameOver()
 	}

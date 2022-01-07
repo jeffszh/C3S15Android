@@ -47,7 +47,7 @@ object GlobalVars {
 	}
 
 	var cannonsPlayerType = PlayerType.HUMAN
-	var soldiersPlayerType = PlayerType.AI
+	var soldiersPlayerType = PlayerType.HUMAN
 	var aiTraversalCount = 0
 
 //	val cannonsUseAIProperty = SimpleBooleanProperty(false)
