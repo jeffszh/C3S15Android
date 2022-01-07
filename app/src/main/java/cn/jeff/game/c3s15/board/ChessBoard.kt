@@ -5,12 +5,14 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Point
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup
 import android.widget.Toast
 import cn.jeff.game.c3s15.GlobalVars
+import cn.jeff.game.c3s15.brain.PlayerType
 import cn.jeff.game.c3s15.event.ChessBoardContentChangedEvent
 import org.greenrobot.eventbus.EventBus
 import kotlin.concurrent.thread
@@ -52,6 +54,24 @@ class ChessBoard : ViewGroup {
 	private val lastMoveIndicator: LastMoveIndicator
 	private val chessBoardContent = ChessBoardContent()
 	// private var lastMove: ChessBoardContent.Move? = null
+
+	/** 鼠标按下的棋盘格位置（X和Y都是0至4）。 */
+	private var mouseDownCellPos: Point? = null
+
+	/** 鼠标操作符合点击风格。 */
+	private var isClickBehavior = false
+		set(value) {
+			mouseDownCellPos?.also { mdp ->
+				if (!field && value) {
+					// 从false变true，设置选择棋子。
+					chessArr[mdp.x + mdp.y * 5].isSelected = true
+				} else if (field && !value) {
+					// 从true变false，取消选择棋子。
+					chessArr[mdp.x + mdp.y * 5].isSelected = false
+				}
+			}
+			field = value
+		}
 
 	init {
 		repeat(25) {
@@ -159,6 +179,24 @@ class ChessBoard : ViewGroup {
 		when (event.action) {
 			MotionEvent.ACTION_DOWN -> {
 				Log.d(LOG_TAG, "=============down====${cellX}====${cellY}=====")
+				if (isClickBehavior) {
+				} else {
+//					if (if (chessBoardContent.isCannonsTurn) {
+//							GlobalVars.cannonsPlayerType == PlayerType.HUMAN
+//						} else {
+//							GlobalVars.soldiersPlayerType == PlayerType.HUMAN
+//						}
+//					) {
+//						if (chessBoardContent[cellX, cellY] ==
+//							if (chessBoardContent.isCannonsTurn) {
+//								Chess.CANNON
+//							} else {
+//								Chess.SOLDIER
+//							}
+//						) {
+//						}
+//					}
+				}
 			}
 			MotionEvent.ACTION_MOVE -> {
 				Log.d(LOG_TAG, "=============move====${cellX}====${cellY}=====")
@@ -185,10 +223,7 @@ class ChessBoard : ViewGroup {
 
 	private fun showDialogIfGameOver() {
 		if (chessBoardContent.gameOver) {
-			val winSideText = if (chessBoardContent.isCannonsWin)
-				GlobalVars.appConf.cannonText
-			else
-				GlobalVars.appConf.soldierText
+			val winSideText = chessBoardContent.whoWin.text
 			// 安卓中顯示對話框不容易，改為Toast。
 			Toast.makeText(context, "【$winSideText】获胜！", Toast.LENGTH_LONG).show()
 		}

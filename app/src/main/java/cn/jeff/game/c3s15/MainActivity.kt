@@ -4,7 +4,9 @@ import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import cn.jeff.game.c3s15.board.Chess
 import cn.jeff.game.c3s15.board.ChessBoardContent
+import cn.jeff.game.c3s15.brain.PlayerType
 import cn.jeff.game.c3s15.event.ChessBoardContentChangedEvent
 import cn.jeff.game.c3s15.event.ConfigChangedEvent
 import kotlinx.android.synthetic.main.activity_main.*
@@ -18,11 +20,6 @@ class MainActivity : Activity() {
 		private const val LOG_TAG = "MainActivity"
 //		var instance: MainActivity? = null
 	}
-
-	private val cannonText
-		get() = GlobalVars.appConf.cannonText
-	private val soldierText
-		get() = GlobalVars.appConf.soldierText
 
 //	val tv01 = findViewById<TextView>(R.id.tv01)
 
@@ -77,33 +74,24 @@ class MainActivity : Activity() {
 	}
 
 	private fun updateStatusText1() {
-		val status1 = "$cannonText：${
-			if (GlobalVars.cannonsUseAI) "電腦" else "人腦"
-		}  $soldierText：${
-			if (GlobalVars.soldiersUseAI) "電腦" else "人腦"
+		val status1 = "${Chess.CANNON.text}：${
+			GlobalVars.cannonsPlayerType.text
+		}  ${Chess.SOLDIER.text}：${
+			GlobalVars.soldiersPlayerType.text
 		}"
 		tv02.text = status1
 	}
 
 	private fun updateStatusText2(chessBoardContent: ChessBoardContent) {
 		val status2 = if (chessBoardContent.gameOver) {
-			if (chessBoardContent.isCannonsWin)
-				"【$cannonText】获胜！"
-			else
-				"【$soldierText】获胜！"
+			"【${chessBoardContent.whoWin.text}】获胜！"
 		} else {
-			if (chessBoardContent.isCannonsTurn) {
-				if (GlobalVars.cannonsUseAI)
-					"电脑【$cannonText】" +
-							"正在思考：${GlobalVars.aiTraversalCount}"
-				else
-					"轮到玩家【$cannonText】走棋"
-			} else {
-				if (GlobalVars.soldiersUseAI)
-					"电脑【$soldierText】" +
-							"正在思考：${GlobalVars.aiTraversalCount}"
-				else
-					"轮到玩家【$soldierText】走棋"
+			val whoseTurnText = chessBoardContent.whoseTurn.text
+			when (GlobalVars.cannonsPlayerType) {
+				PlayerType.HUMAN -> "轮到玩家【$whoseTurnText】走棋"
+				PlayerType.AI -> "电脑【$whoseTurnText】" +
+						"正在思考：${GlobalVars.aiTraversalCount}"
+				PlayerType.NET -> "轮到对方【$whoseTurnText】走棋"
 			}
 		}
 		tv03.text = status2

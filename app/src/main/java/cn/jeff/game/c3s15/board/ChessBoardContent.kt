@@ -13,9 +13,21 @@ class ChessBoardContent {
 	private val chessList = MutableList(25) { Chess.EMPTY }
 	var lastMove: Move? = null
 	private var moveCount = 0
-	val isCannonsTurn get() = (moveCount % 2) == 0
+	private val isCannonsTurn get() = (moveCount % 2) == 0
 	var gameOver = false
-	val isCannonsWin get() = gameOver && !isCannonsTurn
+
+	val whoseTurn
+		get() = when {
+			gameOver -> Chess.EMPTY
+			isCannonsTurn -> Chess.CANNON
+			else -> Chess.SOLDIER
+		}
+	val whoWin
+		get() = when {
+			!gameOver -> Chess.EMPTY
+			isCannonsTurn -> Chess.SOLDIER
+			else -> Chess.CANNON
+		}
 
 	operator fun get(x: Int, y: Int) = if (x in 0..4 && y in 0..4) chessList[x + y * 5] else null
 

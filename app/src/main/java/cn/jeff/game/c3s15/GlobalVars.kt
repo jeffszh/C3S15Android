@@ -1,5 +1,6 @@
 package cn.jeff.game.c3s15
 
+import cn.jeff.game.c3s15.brain.PlayerType
 import cn.jeff.game.c3s15.event.ConfigChangedEvent
 import com.google.gson.GsonBuilder
 import org.greenrobot.eventbus.EventBus
@@ -45,8 +46,8 @@ object GlobalVars {
 		}
 	}
 
-	var cannonsUseAI = false
-	var soldiersUseAI = true
+	var cannonsPlayerType = PlayerType.HUMAN
+	var soldiersPlayerType = PlayerType.AI
 	var aiTraversalCount = 0
 
 //	val cannonsUseAIProperty = SimpleBooleanProperty(false)
