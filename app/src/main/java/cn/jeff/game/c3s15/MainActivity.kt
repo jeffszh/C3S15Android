@@ -1,6 +1,8 @@
 package cn.jeff.game.c3s15
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -70,6 +72,7 @@ class MainActivity : Activity() {
 				chessBoard.restartGame()
 			}
 			R.id.btnSettings -> {
+				showSettingsDialog()
 			}
 		}
 	}
@@ -96,6 +99,39 @@ class MainActivity : Activity() {
 			}
 		}
 		tv03.text = status2
+	}
+
+	private fun showSettingsDialog() {
+		val items = arrayOf(
+			"${Chess.CANNON.text}：人腦  ${Chess.SOLDIER.text}：電腦",
+			"${Chess.CANNON.text}：電腦  ${Chess.SOLDIER.text}：人腦",
+			"${Chess.CANNON.text}：人腦  ${Chess.SOLDIER.text}：人腦",
+			"${Chess.CANNON.text}：電腦  ${Chess.SOLDIER.text}：電腦",
+		)
+		var choice = when (GlobalVars.cannonsPlayerType to GlobalVars.soldiersPlayerType) {
+			PlayerType.HUMAN to PlayerType.AI -> 0
+			PlayerType.AI to PlayerType.HUMAN -> 1
+			PlayerType.HUMAN to PlayerType.HUMAN -> 2
+			PlayerType.AI to PlayerType.AI -> 3
+			else -> 0
+		}
+		AlertDialog.Builder(this)
+			.setTitle("选项")
+			.setSingleChoiceItems(items, choice) { _, which ->
+				choice = which
+			}.setPositiveButton("确定") { _, _ ->
+				when (choice) {
+					0 -> PlayerType.HUMAN to PlayerType.AI
+					1 -> PlayerType.AI to PlayerType.HUMAN
+					2 -> PlayerType.HUMAN to PlayerType.HUMAN
+					3 -> PlayerType.AI to PlayerType.AI
+					else -> null
+				}?.apply {
+					GlobalVars.cannonsPlayerType = first
+					GlobalVars.soldiersPlayerType = second
+					EventBus.getDefault().post(ConfigChangedEvent(LOG_TAG))
+				}
+			}.show()
 	}
 
 }
