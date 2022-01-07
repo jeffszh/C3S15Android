@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import cn.jeff.game.c3s15.board.Chess
 import cn.jeff.game.c3s15.board.ChessBoardContent
+import cn.jeff.game.c3s15.brain.Brain
 import cn.jeff.game.c3s15.brain.PlayerType
 import cn.jeff.game.c3s15.event.ChessBoardContentChangedEvent
 import cn.jeff.game.c3s15.event.ConfigChangedEvent
@@ -73,6 +74,7 @@ class MainActivity : Activity() {
 //		findViewById<ChessBoard>(R.id.chessBoard).invalidate()
 		updateStatusText1()
 		chessBoard.invalidate()
+		Brain.restartAiRoutine(chessBoard.chessBoardContent)
 	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN_ORDERED)

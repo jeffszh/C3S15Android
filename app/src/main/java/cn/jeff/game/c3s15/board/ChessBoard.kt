@@ -12,6 +12,7 @@ import android.view.MotionEvent
 import android.view.ViewGroup
 import android.widget.Toast
 import cn.jeff.game.c3s15.GlobalVars
+import cn.jeff.game.c3s15.brain.Brain
 import cn.jeff.game.c3s15.brain.PlayerType
 import cn.jeff.game.c3s15.event.ChessBoardContentChangedEvent
 import org.greenrobot.eventbus.EventBus
@@ -52,7 +53,7 @@ class ChessBoard : ViewGroup {
 
 	private val chessArr = mutableListOf<ChessCell>()
 	private val lastMoveIndicator: LastMoveIndicator
-	private val chessBoardContent = ChessBoardContent()
+	val chessBoardContent = ChessBoardContent()
 	// private var lastMove: ChessBoardContent.Move? = null
 
 	/** 鼠标按下的棋盘格位置（X和Y都是0至4）。 */
@@ -251,6 +252,7 @@ class ChessBoard : ViewGroup {
 		updateLastMove()
 		rearrangeChildren()
 		showDialogIfGameOver()
+		Brain.restartAiRoutine(chessBoardContent)
 	}
 
 	private fun mouseXyToChessBoardXy(mX: Float, mY: Float) = listOf(
