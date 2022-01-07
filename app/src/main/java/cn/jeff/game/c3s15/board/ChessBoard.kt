@@ -97,6 +97,13 @@ class ChessBoard : ViewGroup {
 		updateLastMove()
 	}
 
+	fun restartGame() {
+		isClickBehavior = false
+		mouseDownCellPos = null
+		chessBoardContent.setInitialContent()
+		applyChessboardContent()
+	}
+
 	private fun applyChessboardContent() {
 		for (cellY in 0..4) {
 			for (cellX in 0..4) {
@@ -105,7 +112,7 @@ class ChessBoard : ViewGroup {
 			}
 		}
 		thread {
-			Thread.sleep(1000)
+			Thread.sleep(100)
 			EventBus.getDefault().post(ChessBoardContentChangedEvent(chessBoardContent))
 		}
 		invalidate()
@@ -146,10 +153,6 @@ class ChessBoard : ViewGroup {
 	}
 
 	override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-		rearrangeChildren()
-	}
-
-	private fun rearrangeChildren() {
 		for (cellY in 0..4) {
 			for (cellX in 0..4) {
 				chessArr[cellY * 5 + cellX].layout(
@@ -158,6 +161,17 @@ class ChessBoard : ViewGroup {
 					(cellSize * (cellX + 1.1)).toInt(),
 					(cellSize * (cellY + 1.1)).toInt()
 				)
+			}
+		}
+	}
+
+	private fun rearrangeChildren() {
+		for (cellY in 0..4) {
+			for (cellX in 0..4) {
+				chessArr[cellY * 5 + cellX].apply {
+					x = cellSize * (cellX + 0.3F)
+					y = cellSize * (cellY + 0.3F)
+				}
 			}
 		}
 //		chessArr[0].layout((cellSize * 1.2).toInt(), (cellSize * 0.2).toInt(),
@@ -208,15 +222,11 @@ class ChessBoard : ViewGroup {
 						}
 					}
 					val draggingCell = chessArr[mdp.x + mdp.y * 5]
-					draggingCell.layout(
-						(event.x - cellSize * 0.5).toInt(),
-						(event.y - cellSize * 0.5).toInt(),
-						(event.x + cellSize * 0.5).toInt(),
-						(event.y + cellSize * 0.5).toInt(),
-					)
+					draggingCell.x = event.x - cellSize * 0.4F
+					draggingCell.y = event.y - cellSize * 0.4F
 					draggingCell.bringToFront()
-					draggingCell.invalidate()
-					invalidate()
+//					draggingCell.invalidate()
+//					invalidate()
 				}
 			}
 			MotionEvent.ACTION_UP -> {
@@ -224,9 +234,9 @@ class ChessBoard : ViewGroup {
 				mouseDownCellPos?.also { mdp ->
 					if (!isClickBehavior) {
 						applyMove(ChessBoardContent.Move(mdp.x, mdp.y, cellX, cellY))
-						isClickBehavior = false
 						mouseDownCellPos = null
 					}
+					rearrangeChildren()
 				}
 			}
 			else -> return super.onTouchEvent(event)

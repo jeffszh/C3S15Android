@@ -67,6 +67,7 @@ class MainActivity : Activity() {
 	fun btnClick(view: View) {
 		when (view.id) {
 			R.id.btnRestartGame -> {
+				chessBoard.restartGame()
 			}
 			R.id.btnSettings -> {
 			}
