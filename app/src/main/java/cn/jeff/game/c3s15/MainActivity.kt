@@ -2,7 +2,6 @@ package cn.jeff.game.c3s15
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -20,7 +19,7 @@ class MainActivity : Activity() {
 
 	companion object {
 		private const val LOG_TAG = "MainActivity"
-//		var instance: MainActivity? = null
+		// var instance: MainActivity? = null
 	}
 
 //	val tv01 = findViewById<TextView>(R.id.tv01)
@@ -31,6 +30,7 @@ class MainActivity : Activity() {
 //		findViewById<FrameLayout>(R.id.pan01).addView(ChessBoard(this))
 //		val tv01 = findViewById<TextView>(R.id.tv01)
 		tv01.text = GlobalVars.appConf.mainTitle
+		// instance = this
 	}
 
 	override fun onStart() {
@@ -41,6 +41,17 @@ class MainActivity : Activity() {
 	override fun onStop() {
 		EventBus.getDefault().unregister(this)
 		super.onStop()
+	}
+
+	override fun onResume() {
+		super.onResume()
+		chessBoard.reloadChessBoardContent()
+		EventBus.getDefault().post(ConfigChangedEvent(LOG_TAG))
+	}
+
+	override fun onPause() {
+		super.onPause()
+		chessBoard.saveChessBoardContent()
 	}
 
 //	override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {

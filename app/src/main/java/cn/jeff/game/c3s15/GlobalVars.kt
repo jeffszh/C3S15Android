@@ -1,5 +1,6 @@
 package cn.jeff.game.c3s15
 
+import cn.jeff.game.c3s15.board.ChessBoardContent
 import cn.jeff.game.c3s15.brain.PlayerType
 import cn.jeff.game.c3s15.event.ConfigChangedEvent
 import com.google.gson.GsonBuilder
@@ -49,6 +50,8 @@ object GlobalVars {
 	var cannonsPlayerType = PlayerType.HUMAN
 	var soldiersPlayerType = PlayerType.HUMAN
 	var aiTraversalCount = 0
+
+	val savedChessBoardContent = ChessBoardContent().apply { setInitialContent() }
 
 //	val cannonsUseAIProperty = SimpleBooleanProperty(false)
 //	var cannonsUseAI: Boolean

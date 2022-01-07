@@ -194,9 +194,15 @@ class ChessBoardContent {
 		}.count()
 
 	fun clone() = ChessBoardContent().also {
-		it.chessList.clear()
-		it.chessList.addAll(chessList)
-		it.moveCount = moveCount
+		cloneTo(it)
+	}
+
+	fun cloneTo(dst: ChessBoardContent) {
+		dst.chessList.clear()
+		dst.chessList.addAll(chessList)
+		dst.moveCount = moveCount
+		dst.lastMove = lastMove
+		dst.gameOver = gameOver
 	}
 
 }

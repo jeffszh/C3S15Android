@@ -88,8 +88,8 @@ class ChessBoard : ViewGroup {
 //		chessArr[13].isSelected = true
 //		chessArr[22].isSelected = true
 
-		chessBoardContent.setInitialContent()
-		applyChessboardContent()
+//		chessBoardContent.setInitialContent()
+//		applyChessboardContent()
 
 		lastMoveIndicator = LastMoveIndicator(context)
 		addView(lastMoveIndicator)
@@ -264,6 +264,20 @@ class ChessBoard : ViewGroup {
 			// 安卓中顯示對話框不容易，改為Toast。
 			Toast.makeText(context, "【$winSideText】获胜！", Toast.LENGTH_LONG).show()
 		}
+	}
+
+	fun saveChessBoardContent() {
+		chessBoardContent.cloneTo(GlobalVars.savedChessBoardContent)
+//		Log.d(LOG_TAG, "save=${GlobalVars.savedChessBoardContent}")
+//		Log.d(LOG_TAG, "saveLastMove=${chessBoardContent.lastMove}")
+	}
+
+	fun reloadChessBoardContent() {
+//		Log.d(LOG_TAG, "load=${GlobalVars.savedChessBoardContent}")
+		GlobalVars.savedChessBoardContent.cloneTo(chessBoardContent)
+		applyChessboardContent()
+//		Log.d(LOG_TAG, "lastMove=${chessBoardContent.lastMove}")
+//		updateLastMove()
 	}
 
 }
