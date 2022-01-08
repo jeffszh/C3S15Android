@@ -15,7 +15,7 @@ class ChessBoardContent {
 	private val chessList = MutableList(25) { Chess.EMPTY }
 	var lastMove: Move? = null
 	private var moveCount = 0
-	private val isCannonsTurn get() = (moveCount % 2) == 0
+	val isCannonsTurn get() = (moveCount % 2) == 0
 	var gameOver = false
 
 	val whoseTurn
