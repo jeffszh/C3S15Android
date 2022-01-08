@@ -75,7 +75,7 @@ object Brain {
 			}, currentDepth + 1).second
 		}
 		val allEval = allPossibleMoveAndEval.map { it.second }
-		val bestEval = if (content.whoseTurn == Chess.CANNON) {
+		val bestEval = if (content.whoseTurn != Chess.SOLDIER) {
 			// 若轮到炮走，求对炮最有利的局面，反之亦然。
 			allEval.minOrNull()
 		} else {
@@ -135,7 +135,7 @@ object Brain {
 			cannonBreathCount == 0 -> 0x10000
 			livingSoldierCount == 0 -> -0x10000
 			else -> livingSoldierCount * 256 - cannonBreathCount * 16
-		} + if ((content.whoseTurn == Chess.CANNON) == (currentDepth / 2 == 0)) {
+		} + if ((content.whoseTurn != Chess.SOLDIER) == (currentDepth / 2 == 0)) {
 			// 改進一下，讓AI傾向於用較少的步數取得勝利。
 			// 若當前深度是偶數，頂層就跟當前層是同一方，
 			// 所以這條分支是正在計算炮方的最佳走法，將會求評估值的最小值，
