@@ -5,6 +5,6 @@ class AppConf {
 	var mainTitle = "跳猫捉老鼠"
 	var cannonText = "貓"
 	var soldierText = "鼠"
-	var aiDepth = 5
+	var aiDepth = 1
 
 }
