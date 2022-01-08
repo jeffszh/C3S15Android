@@ -9,8 +9,10 @@ import cn.jeff.game.c3s15.board.Chess
 import cn.jeff.game.c3s15.board.ChessBoardContent
 import cn.jeff.game.c3s15.brain.Brain
 import cn.jeff.game.c3s15.brain.PlayerType
+import cn.jeff.game.c3s15.event.AiTraversalEvent
 import cn.jeff.game.c3s15.event.ChessBoardContentChangedEvent
 import cn.jeff.game.c3s15.event.ConfigChangedEvent
+import cn.jeff.game.c3s15.event.MoveChessEvent
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -82,6 +84,16 @@ class MainActivity : Activity() {
 		updateStatusText2(event.chessBoardContent)
 	}
 
+	@Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
+	fun onMoveChessEvent(event: MoveChessEvent) {
+		chessBoard.applyMove(event.move)
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
+	fun onAiTraversalEvent(event: AiTraversalEvent) {
+		updateStatusText2(chessBoard.chessBoardContent)
+	}
+
 	fun btnClick(view: View) {
 		when (view.id) {
 			R.id.btnRestartGame -> {
@@ -108,11 +120,17 @@ class MainActivity : Activity() {
 			"【${chessBoardContent.whoWin.text}】获胜！"
 		} else {
 			val whoseTurnText = chessBoardContent.whoseTurn.text
-			when (GlobalVars.cannonsPlayerType) {
+			val playerType = when (chessBoardContent.whoseTurn) {
+				Chess.EMPTY -> null
+				Chess.SOLDIER -> GlobalVars.soldiersPlayerType
+				Chess.CANNON -> GlobalVars.cannonsPlayerType
+			}
+			when (playerType) {
 				PlayerType.HUMAN -> "轮到玩家【$whoseTurnText】走棋"
 				PlayerType.AI -> "电脑【$whoseTurnText】" +
 						"正在思考：${GlobalVars.aiTraversalCount}"
 				PlayerType.NET -> "轮到对方【$whoseTurnText】走棋"
+				null -> "轮到【$whoseTurnText】走棋"
 			}
 		}
 		tv03.text = status2

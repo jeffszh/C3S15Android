@@ -59,7 +59,7 @@ object GlobalVars {
 	}
 
 	var cannonsPlayerType = PlayerType.HUMAN
-	var soldiersPlayerType = PlayerType.HUMAN
+	var soldiersPlayerType = PlayerType.AI
 	var aiTraversalCount = 0
 
 	val savedChessBoardContent = ChessBoardContent().apply { setInitialContent() }

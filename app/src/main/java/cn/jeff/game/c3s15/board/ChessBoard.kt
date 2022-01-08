@@ -245,7 +245,7 @@ class ChessBoard : ViewGroup {
 		return true
 	}
 
-	private fun applyMove(move: ChessBoardContent.Move) {
+	fun applyMove(move: ChessBoardContent.Move) {
 		chessBoardContent.applyMove(move)
 		applyChessboardContent()
 		lastMoveIndicator.bringToFront()
