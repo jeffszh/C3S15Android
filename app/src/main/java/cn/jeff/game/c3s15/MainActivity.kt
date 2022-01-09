@@ -55,10 +55,10 @@ class MainActivity : Activity() {
 		EventBus.getDefault().post(ConfigChangedEvent(LOG_TAG))
 	}
 
-	override fun onPause() {
-		super.onPause()
-		chessBoard.saveChessBoardContent()
-	}
+//	override fun onPause() {
+//		super.onPause()
+//		chessBoard.saveChessBoardContent()
+//	}
 
 //	override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
 //		super.onCreate(savedInstanceState, persistentState)
@@ -76,7 +76,7 @@ class MainActivity : Activity() {
 //		findViewById<ChessBoard>(R.id.chessBoard).invalidate()
 		updateStatusText1()
 		chessBoard.invalidate()
-		Brain.restartAiRoutine(chessBoard.chessBoardContent)
+		Brain.restartAiRoutine(GlobalVars.chessBoardContent)
 	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
@@ -91,7 +91,7 @@ class MainActivity : Activity() {
 
 	@Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
 	fun onAiTraversalEvent(event: AiTraversalEvent) {
-		updateStatusText2(chessBoard.chessBoardContent)
+		updateStatusText2(GlobalVars.chessBoardContent)
 	}
 
 	fun btnClick(view: View) {

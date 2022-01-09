@@ -62,7 +62,7 @@ object GlobalVars {
 	var soldiersPlayerType = PlayerType.AI
 	var aiTraversalCount = 0
 
-	val savedChessBoardContent = ChessBoardContent().apply { setInitialContent() }
+	val chessBoardContent = ChessBoardContent().apply { setInitialContent() }
 
 //	val cannonsUseAIProperty = SimpleBooleanProperty(false)
 //	var cannonsUseAI: Boolean

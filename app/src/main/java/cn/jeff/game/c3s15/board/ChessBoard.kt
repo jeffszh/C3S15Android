@@ -53,7 +53,7 @@ class ChessBoard : ViewGroup {
 
 	private val chessArr = mutableListOf<ChessCell>()
 	private val lastMoveIndicator: LastMoveIndicator
-	val chessBoardContent = ChessBoardContent()
+	private val chessBoardContent get() = GlobalVars.chessBoardContent
 	// private var lastMove: ChessBoardContent.Move? = null
 
 	/** 鼠标按下的棋盘格位置（X和Y都是0至4）。 */
@@ -117,6 +117,7 @@ class ChessBoard : ViewGroup {
 			EventBus.getDefault().post(ChessBoardContentChangedEvent(chessBoardContent))
 		}
 		invalidate()
+		Brain.restartAiRoutine(chessBoardContent)
 	}
 
 	override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -268,15 +269,15 @@ class ChessBoard : ViewGroup {
 		}
 	}
 
-	fun saveChessBoardContent() {
-		chessBoardContent.cloneTo(GlobalVars.savedChessBoardContent)
+//	fun saveChessBoardContent() {
+//		chessBoardContent.cloneTo(GlobalVars.savedChessBoardContent)
 //		Log.d(LOG_TAG, "save=${GlobalVars.savedChessBoardContent}")
 //		Log.d(LOG_TAG, "saveLastMove=${chessBoardContent.lastMove}")
-	}
+//	}
 
 	fun reloadChessBoardContent() {
 //		Log.d(LOG_TAG, "load=${GlobalVars.savedChessBoardContent}")
-		GlobalVars.savedChessBoardContent.cloneTo(chessBoardContent)
+//		GlobalVars.savedChessBoardContent.cloneTo(chessBoardContent)
 		applyChessboardContent()
 //		Log.d(LOG_TAG, "lastMove=${chessBoardContent.lastMove}")
 //		updateLastMove()
