@@ -161,12 +161,16 @@ class MainActivity : Activity() {
 			"${Chess.CANNON.text}：電腦  ${Chess.SOLDIER.text}：人腦",
 			"${Chess.CANNON.text}：人腦  ${Chess.SOLDIER.text}：人腦",
 			"${Chess.CANNON.text}：電腦  ${Chess.SOLDIER.text}：電腦",
+			"${Chess.CANNON.text}：自己  ${Chess.SOLDIER.text}：网友",
+			"${Chess.CANNON.text}：网友  ${Chess.SOLDIER.text}：自己",
 		)
 		var choice = when (GlobalVars.cannonsPlayerType to GlobalVars.soldiersPlayerType) {
 			PlayerType.HUMAN to PlayerType.AI -> 0
 			PlayerType.AI to PlayerType.HUMAN -> 1
 			PlayerType.HUMAN to PlayerType.HUMAN -> 2
 			PlayerType.AI to PlayerType.AI -> 3
+			PlayerType.HUMAN to PlayerType.NET -> 4
+			PlayerType.NET to PlayerType.HUMAN -> 5
 			else -> 0
 		}
 		AlertDialog.Builder(this)
@@ -179,6 +183,8 @@ class MainActivity : Activity() {
 					1 -> PlayerType.AI to PlayerType.HUMAN
 					2 -> PlayerType.HUMAN to PlayerType.HUMAN
 					3 -> PlayerType.AI to PlayerType.AI
+					4 -> PlayerType.HUMAN to PlayerType.NET
+					5 -> PlayerType.NET to PlayerType.HUMAN
 					else -> null
 				}?.apply {
 					GlobalVars.cannonsPlayerType = first
