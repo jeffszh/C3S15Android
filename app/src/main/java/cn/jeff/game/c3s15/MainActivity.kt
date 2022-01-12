@@ -9,10 +9,8 @@ import cn.jeff.game.c3s15.board.Chess
 import cn.jeff.game.c3s15.board.ChessBoardContent
 import cn.jeff.game.c3s15.brain.Brain
 import cn.jeff.game.c3s15.brain.PlayerType
-import cn.jeff.game.c3s15.event.AiTraversalEvent
-import cn.jeff.game.c3s15.event.ChessBoardContentChangedEvent
-import cn.jeff.game.c3s15.event.ConfigChangedEvent
-import cn.jeff.game.c3s15.event.MoveChessEvent
+import cn.jeff.game.c3s15.event.*
+import cn.jeff.game.c3s15.net.NetworkGameProcessor
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -86,7 +84,7 @@ class MainActivity : Activity() {
 
 	@Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
 	fun onMoveChessEvent(event: MoveChessEvent) {
-		chessBoard.applyMove(event.move)
+		chessBoard.applyMove(event.move, event.byRemote)
 	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
@@ -94,10 +92,16 @@ class MainActivity : Activity() {
 		updateStatusText2(GlobalVars.chessBoardContent)
 	}
 
+	@Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
+	fun onNetGameStateChangedEvent(event: NetGameStateChangedEvent) {
+		// TODO
+	}
+
 	fun btnClick(view: View) {
 		when (view.id) {
 			R.id.btnRestartGame -> {
 				chessBoard.restartGame()
+				NetworkGameProcessor.restart()
 			}
 			R.id.btnSettings -> {
 				showSettingsDialog()

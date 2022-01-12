@@ -15,6 +15,8 @@ import cn.jeff.game.c3s15.GlobalVars
 import cn.jeff.game.c3s15.brain.Brain
 import cn.jeff.game.c3s15.brain.PlayerType
 import cn.jeff.game.c3s15.event.ChessBoardContentChangedEvent
+import cn.jeff.game.c3s15.net.NetGameState
+import cn.jeff.game.c3s15.net.NetworkGameProcessor
 import org.greenrobot.eventbus.EventBus
 import kotlin.concurrent.thread
 import kotlin.math.floor
@@ -246,7 +248,13 @@ class ChessBoard : ViewGroup {
 		return true
 	}
 
-	fun applyMove(move: ChessBoardContent.Move) {
+	fun applyMove(move: ChessBoardContent.Move, byRemote: Boolean = false) {
+		if ((GlobalVars.soldiersPlayerType == PlayerType.NET ||
+					GlobalVars.cannonsPlayerType == PlayerType.NET) &&
+			!byRemote && NetworkGameProcessor.state != NetGameState.LOCAL_TURN
+		) {
+			return
+		}
 		chessBoardContent.applyMove(move)
 		applyChessboardContent()
 		lastMoveIndicator.bringToFront()
@@ -254,6 +262,9 @@ class ChessBoard : ViewGroup {
 		rearrangeChildren()
 		showDialogIfGameOver()
 		Brain.restartAiRoutine(chessBoardContent)
+		if (!byRemote) {
+			NetworkGameProcessor.applyLocalMove(chessBoardContent.compressToInt64(), move)
+		}
 	}
 
 	private fun mouseXyToChessBoardXy(mX: Float, mY: Float) = listOf(
