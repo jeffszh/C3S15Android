@@ -10,6 +10,7 @@ import cn.jeff.game.c3s15.board.ChessBoardContent
 import cn.jeff.game.c3s15.brain.Brain
 import cn.jeff.game.c3s15.brain.PlayerType
 import cn.jeff.game.c3s15.event.*
+import cn.jeff.game.c3s15.net.NetGameState
 import cn.jeff.game.c3s15.net.NetworkGameProcessor
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
@@ -94,7 +95,7 @@ class MainActivity : Activity() {
 
 	@Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
 	fun onNetGameStateChangedEvent(event: NetGameStateChangedEvent) {
-		// TODO
+		updateStatusText4(event.newNetGameState)
 	}
 
 	fun btnClick(view: View) {
@@ -138,6 +139,20 @@ class MainActivity : Activity() {
 			}
 		}
 		tv03.text = status2
+	}
+
+	private fun updateStatusText4(state: NetGameState) {
+		val note = when (state) {
+			NetGameState.OFFLINE,
+			NetGameState.GAME_OVER,
+			NetGameState.LOST_CONN -> "离线"
+			NetGameState.INVITING,
+			NetGameState.WAIT_INV -> "正在寻找网络对手……"
+			NetGameState.LOCAL_TURN,
+			NetGameState.REMOTE_TURN -> "已连线"
+		}
+		val txt = "$note  $state"
+		tv04.text = txt
 	}
 
 	private fun showSettingsDialog() {
