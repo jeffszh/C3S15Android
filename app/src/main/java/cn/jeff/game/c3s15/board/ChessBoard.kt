@@ -255,14 +255,14 @@ class ChessBoard : ViewGroup {
 		) {
 			return
 		}
-		chessBoardContent.applyMove(move)
+		val moveSuccess = chessBoardContent.applyMove(move)
 		applyChessboardContent()
 		lastMoveIndicator.bringToFront()
 		updateLastMove()
 		rearrangeChildren()
 		showDialogIfGameOver()
 		Brain.restartAiRoutine(chessBoardContent)
-		if (!byRemote) {
+		if (moveSuccess && !byRemote) {
 			NetworkGameProcessor.applyLocalMove(chessBoardContent.compressToInt64(), move)
 		}
 	}
