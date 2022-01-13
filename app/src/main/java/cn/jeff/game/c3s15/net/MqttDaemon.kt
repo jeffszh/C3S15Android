@@ -17,12 +17,22 @@ object MqttDaemon {
 //	private const val SERVER_ADDR = "broker.hivemq.com"
 	private const val SERVER_ADDR = "broker.emqx.io"
 
+	// 主题前缀
+	private const val TOPIC_PREFIX = "cn.jeff.game.C3S15"
+
+	// 通道号
+	var channelNum = 1234
+		set(value) {
+			field = value
+			restart()
+		}
+
 	// 主题
-	private const val TOPIC = "cn.jeff.game.C3S15"
+	private val runningTopic get() = "$TOPIC_PREFIX/$channelNum"
 
 	// QOS
-	private val usingQoS = QoS.AT_MOST_ONCE
-	// private val usingQoS = QoS.EXACTLY_ONCE
+	// private val usingQoS = QoS.AT_MOST_ONCE
+	private val usingQoS = QoS.EXACTLY_ONCE
 
 	// MQTT对象
 	private val mqtt = MQTT().apply {
@@ -60,6 +70,7 @@ object MqttDaemon {
 					receiver(conn)
 				} catch (e: InterruptedException) {
 					e.printStackTrace()
+					conn.disconnect()
 				}
 			}
 			senderThread = thread(name = "MQTT_sender") {
@@ -67,6 +78,7 @@ object MqttDaemon {
 					sender(conn)
 				} catch (e: InterruptedException) {
 					e.printStackTrace()
+					conn.disconnect()
 				}
 			}
 		}
@@ -74,11 +86,18 @@ object MqttDaemon {
 
 	fun stop() {
 		receiverThread?.interrupt()
+		receiverThread = null
 		senderThread?.interrupt()
+		senderThread = null
+	}
+
+	private fun restart() {
+		stop()
+		start()
 	}
 
 	private fun receiver(conn: BlockingConnection) {
-		conn.subscribe(arrayOf(Topic(TOPIC, usingQoS)))
+		conn.subscribe(arrayOf(Topic(runningTopic, usingQoS)))
 		while (!Thread.interrupted()) {
 			val msg = conn.receive()
 			val txt = msg.payload.toString(Charsets.UTF_8)
@@ -91,7 +110,7 @@ object MqttDaemon {
 		while (!Thread.interrupted()) {
 			// val txt = "${mqtt.clientId}: ${sendingQueue.take()}"
 			val txt = sendingQueue.take()
-			conn.publish(TOPIC, txt.toByteArray(Charsets.UTF_8), usingQoS, false)
+			conn.publish(runningTopic, txt.toByteArray(Charsets.UTF_8), usingQoS, false)
 		}
 	}
 

@@ -3,13 +3,17 @@ package cn.jeff.game.c3s15
 import android.app.Activity
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.View
+import android.widget.EditText
+import android.widget.Toast
 import cn.jeff.game.c3s15.board.Chess
 import cn.jeff.game.c3s15.board.ChessBoardContent
 import cn.jeff.game.c3s15.brain.Brain
 import cn.jeff.game.c3s15.brain.PlayerType
 import cn.jeff.game.c3s15.event.*
+import cn.jeff.game.c3s15.net.MqttDaemon
 import cn.jeff.game.c3s15.net.NetGameState
 import cn.jeff.game.c3s15.net.NetworkGameProcessor
 import kotlinx.android.synthetic.main.activity_main.*
@@ -107,6 +111,9 @@ class MainActivity : Activity() {
 			R.id.btnSettings -> {
 				showSettingsDialog()
 			}
+			R.id.btnChannel -> {
+				showChangeChannelDialog()
+			}
 		}
 	}
 
@@ -190,6 +197,28 @@ class MainActivity : Activity() {
 					GlobalVars.cannonsPlayerType = first
 					GlobalVars.soldiersPlayerType = second
 					EventBus.getDefault().post(ConfigChangedEvent(LOG_TAG))
+				}
+			}.show()
+	}
+
+	private fun showChangeChannelDialog() {
+		val editText = EditText(this)
+		editText.inputType = InputType.TYPE_CLASS_NUMBER
+		editText.setText(MqttDaemon.channelNum.toString())
+		AlertDialog.Builder(this)
+			.setTitle("对战通道")
+			.setView(editText)
+			.setPositiveButton("确定") { _, _ ->
+				val txt = editText.text.toString()
+				val num = txt.toIntOrNull() ?: -1
+				if (num in 0..99999) {
+					MqttDaemon.channelNum = num
+				} else {
+					// 安卓真蠢！要点击按钮不关闭，只能通过非常手段才能做到，不理了。
+					Toast.makeText(
+						this, "无效通道号，对战通道未改变，请输入5位以内的数字。",
+						Toast.LENGTH_LONG
+					).show()
 				}
 			}.show()
 	}
