@@ -149,6 +149,7 @@ object NetworkGameProcessor {
 					// 若已跟自己配对，进入游戏。
 					println("已配对，进入游戏。")
 					pairedRemoteId = receivedMsg.localId
+					remoteNoResponseCount = 0
 					state = NetGameState.REMOTE_TURN
 					break
 				}
@@ -173,6 +174,7 @@ object NetworkGameProcessor {
 			}
 			NetGameState.REMOTE_TURN -> {
 				if (receivedMsg.remoteId == localId) {
+					// 收到对方催促走棋，对方已进入对战状态，自己也进入对战状态。
 					pairedRemoteId = receivedMsg.localId
 					localLastMove = null
 					state = NetGameState.LOCAL_TURN
@@ -270,6 +272,7 @@ object NetworkGameProcessor {
 			while (gameMsgQueue.poll() != null) {
 				// do nothing
 			}
+			remoteNoResponseCount = 0
 			state = NetGameState.REMOTE_TURN
 		}
 	}
