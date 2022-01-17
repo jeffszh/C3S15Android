@@ -7,6 +7,7 @@ import org.fusesource.mqtt.client.MQTT
 import org.fusesource.mqtt.client.QoS
 import org.fusesource.mqtt.client.Topic
 import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 import kotlin.random.Random
 
@@ -52,6 +53,9 @@ object MqttDaemon {
 
 	// 发送缓冲区
 	private val sendingQueue = LinkedBlockingQueue<String>()
+
+	// 接收缓冲区
+	private val receivingQueue = LinkedBlockingQueue<String>()
 
 	fun start() {
 		thread(name = "MQTT_daemon") {
@@ -103,7 +107,8 @@ object MqttDaemon {
 		while (!Thread.interrupted()) {
 			val msg = conn.receive()
 			val txt = msg.payload.toString(Charsets.UTF_8)
-			NetworkGameProcessor.onMqttReceived(txt)
+			// NetworkGameProcessor.onMqttReceived(txt)
+			receivingQueue.offer(txt)
 			msg.ack()
 		}
 	}
@@ -118,6 +123,13 @@ object MqttDaemon {
 
 	fun sendMsg(txt: String) {
 		sendingQueue.offer(txt)
+	}
+
+	fun receiveMsg(timeOut: Long): String? =
+		receivingQueue.poll(timeOut, TimeUnit.MILLISECONDS)
+
+	fun clearReceivingQueue() {
+		receivingQueue.clear()
 	}
 
 }
