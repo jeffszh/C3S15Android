@@ -7,4 +7,6 @@ class AppConf {
 	var soldierText = "鼠"
 	var aiDepth = 1
 
+	var mqttChannelNum = 1234
+
 }

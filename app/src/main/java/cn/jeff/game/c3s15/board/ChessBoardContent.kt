@@ -173,7 +173,7 @@ class ChessBoardContent {
 			this[move.fromX, move.fromY] = Chess.EMPTY
 			lastMove = move
 			moveCount++
-			gameOver = livingSoldierCount() == 0 || cannonBreathCount() == 0
+			gameOver = livingSoldierCount() == 0 || cannonBreathCount() == 0 || soldiersNoBreath()
 			true
 		} else {
 			false
@@ -206,6 +206,21 @@ class ChessBoardContent {
 				this[x, y - 1],
 			).contains(Chess.CANNON)
 		}.count()
+
+	/**
+	 * 【兵】没有“气”，【兵】也有可能被困毙。
+	 */
+	private fun soldiersNoBreath(): Boolean =
+		(0 until 25).none { index ->
+			val (x, y) = index % 5 to index / 5
+			(chessList[index] == Chess.SOLDIER) &&
+					listOf(
+						this[x + 1, y],
+						this[x - 1, y],
+						this[x, y + 1],
+						this[x, y - 1],
+					).contains(Chess.EMPTY)
+		}
 
 	fun clone() = ChessBoardContent().also {
 		cloneTo(it)

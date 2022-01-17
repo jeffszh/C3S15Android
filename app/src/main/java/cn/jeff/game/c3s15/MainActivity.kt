@@ -114,6 +114,9 @@ class MainActivity : Activity() {
 			R.id.btnChannel -> {
 				showChangeChannelDialog()
 			}
+			R.id.btnAiDepth -> {
+				showChangeAiDepthDialog()
+			}
 		}
 	}
 
@@ -213,10 +216,34 @@ class MainActivity : Activity() {
 				val num = txt.toIntOrNull() ?: -1
 				if (num in 0..99999) {
 					MqttDaemon.channelNum = num
+					GlobalVars.saveConf()
 				} else {
 					// 安卓真蠢！要点击按钮不关闭，只能通过非常手段才能做到，不理了。
 					Toast.makeText(
 						this, "无效通道号，对战通道未改变，请输入5位以内的数字。",
+						Toast.LENGTH_LONG
+					).show()
+				}
+			}.show()
+	}
+
+	private fun showChangeAiDepthDialog() {
+		val editText = EditText(this)
+		editText.inputType = InputType.TYPE_CLASS_NUMBER
+		editText.setText(GlobalVars.appConf.aiDepth.toString())
+		AlertDialog.Builder(this)
+			.setTitle("AI强度（1-9）")
+			.setView(editText)
+			.setPositiveButton("确定") { _, _ ->
+				val txt = editText.text.toString()
+				val num = txt.toIntOrNull() ?: -1
+				if (num in 1..9) {
+					GlobalVars.appConf.aiDepth = num
+					GlobalVars.saveConf()
+				} else {
+					// 安卓真蠢！要点击按钮不关闭，只能通过非常手段才能做到，不理了。
+					Toast.makeText(
+						this, "输入无效，AI强度必须是1-9。",
 						Toast.LENGTH_LONG
 					).show()
 				}

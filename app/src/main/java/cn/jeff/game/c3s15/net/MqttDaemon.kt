@@ -1,5 +1,6 @@
 package cn.jeff.game.c3s15.net
 
+import cn.jeff.game.c3s15.GlobalVars
 import org.fusesource.hawtbuf.UTF8Buffer
 import org.fusesource.mqtt.client.BlockingConnection
 import org.fusesource.mqtt.client.MQTT
@@ -21,9 +22,10 @@ object MqttDaemon {
 	private const val TOPIC_PREFIX = "cn.jeff.game.C3S15"
 
 	// 通道号
-	var channelNum = 1234
+	var channelNum
+		get() = GlobalVars.appConf.mqttChannelNum
 		set(value) {
-			field = value
+			GlobalVars.appConf.mqttChannelNum = value
 			restart()
 		}
 
