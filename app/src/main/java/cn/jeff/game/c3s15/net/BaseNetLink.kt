@@ -13,6 +13,7 @@ abstract class BaseNetLink(op: BaseNetLink.() -> Unit) : AutoCloseable {
 	private var onConnectFunc: () -> Unit = {}
 	private var onErrorFunc: (Exception) -> Unit = {}
 
+	@Volatile
 	var connected = false
 		private set
 

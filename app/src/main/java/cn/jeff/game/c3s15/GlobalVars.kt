@@ -91,7 +91,7 @@ object GlobalVars {
 			}
 		}
 
-	val isNetConnected = netLink?.connected ?: false
+	val isNetConnected get() = netLink?.connected ?: false
 
 	const val BLUETOOTH_LINK_UUID = "b35835a0-d88d-4d70-836b-ecab87a5a11b"
 

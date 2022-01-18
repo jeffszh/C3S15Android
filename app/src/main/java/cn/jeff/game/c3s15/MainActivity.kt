@@ -13,6 +13,8 @@ import cn.jeff.game.c3s15.board.ChessBoardContent
 import cn.jeff.game.c3s15.brain.Brain
 import cn.jeff.game.c3s15.brain.PlayerType
 import cn.jeff.game.c3s15.event.*
+import cn.jeff.game.c3s15.net.BaseNetLink
+import cn.jeff.game.c3s15.net.BluetoothLink
 import cn.jeff.game.c3s15.net.MqttDaemon
 import cn.jeff.game.c3s15.net.MqttLink
 import kotlinx.android.synthetic.main.activity_main.*
@@ -266,16 +268,22 @@ class MainActivity : Activity() {
 			AlertDialog.Builder(this)
 				.setTitle("连接方式")
 				.setPositiveButton("互联网") { _, _ ->
-					showMqttWaitConnectDialog()
+					showWaitConnectDialog { initiative, op ->
+						MqttLink(initiative, op)
+					}
 				}
 				.setNeutralButton("蓝牙") { _, _ ->
-					// TODO
+					showWaitConnectDialog { initiative, op ->
+						BluetoothLink(initiative, op)
+					}
 				}
 				.show()
 		}
 	}
 
-	private fun showMqttWaitConnectDialog() {
+	private fun showWaitConnectDialog(
+		linkCreator: (initiative: Boolean, op: BaseNetLink.() -> Unit) -> Unit
+	) {
 		val (title, initiative) = if (GlobalVars.cannonsPlayerType == PlayerType.NET) {
 			"正在等待网友连接……" to false
 		} else {
@@ -283,7 +291,7 @@ class MainActivity : Activity() {
 		}
 		GlobalVars.netLink?.close()
 		GlobalVars.netLink = null
-		MqttLink(initiative) {
+		linkCreator(initiative) {
 			val dialog = AlertDialog.Builder(this@MainActivity)
 				.setTitle(title)
 				.setCancelable(false)
@@ -308,6 +316,7 @@ class MainActivity : Activity() {
 				}
 			}
 			onError {
+				it.printStackTrace()
 				runOnUiThread {
 					dialog.dismiss()
 					Toast.makeText(
