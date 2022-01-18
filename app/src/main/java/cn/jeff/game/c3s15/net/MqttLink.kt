@@ -4,7 +4,7 @@ import java.io.IOException
 import java.util.*
 import kotlin.concurrent.thread
 
-class MqttLink(initiative: Boolean, op: MqttLink.() -> Unit) : BaseNetLink() {
+class MqttLink(initiative: Boolean, op: BaseNetLink.() -> Unit) : BaseNetLink(op) {
 
 //	private const val TXT_OFFLINE = "离线"
 //	private const val TXT_WAITING_CONNECTION = "正在等待连接……"
@@ -19,7 +19,6 @@ class MqttLink(initiative: Boolean, op: MqttLink.() -> Unit) : BaseNetLink() {
 	private var remoteId = ""
 
 	init {
-		this.op()
 		workThread = thread(name = "MQTT_LINK_WORK_THREAD") {
 			MqttDaemon.clearReceivingQueue()
 			try {

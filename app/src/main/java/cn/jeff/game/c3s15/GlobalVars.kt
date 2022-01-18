@@ -4,6 +4,7 @@ import cn.jeff.game.c3s15.board.ChessBoardContent
 import cn.jeff.game.c3s15.brain.PlayerType
 import cn.jeff.game.c3s15.event.ConfigChangedEvent
 import cn.jeff.game.c3s15.event.NetStatusChangeEvent
+import cn.jeff.game.c3s15.net.BaseNetLink
 import cn.jeff.game.c3s15.net.MqttLink
 import com.google.gson.GsonBuilder
 import org.greenrobot.eventbus.EventBus
@@ -83,7 +84,7 @@ object GlobalVars {
 //	val aiTraversalCountProperty = SimpleIntegerProperty(0)
 //	val aiTraversalCount: Int get() = aiTraversalCountProperty.value
 
-	var mqttLink: MqttLink? = null
+	var netLink: BaseNetLink? = null
 		set(value) {
 			if (field != value) {
 				field = value

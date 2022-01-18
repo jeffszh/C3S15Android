@@ -2,7 +2,7 @@ package cn.jeff.game.c3s15.net
 
 import com.google.gson.GsonBuilder
 
-abstract class BaseNetLink : AutoCloseable {
+abstract class BaseNetLink(op: BaseNetLink.() -> Unit) : AutoCloseable {
 
 	companion object {
 		internal const val LINK_TIMEOUT = 8000L
@@ -15,6 +15,10 @@ abstract class BaseNetLink : AutoCloseable {
 
 	var connected = false
 		protected set
+
+	init {
+		this.op()
+	}
 
 	fun onConnect(func: () -> Unit) {
 		onConnectFunc = func

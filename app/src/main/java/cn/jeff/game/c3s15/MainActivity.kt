@@ -167,7 +167,7 @@ class MainActivity : Activity() {
 		tv04.text = txt
 	}*/
 	private fun updateStatusText4() {
-		tv04.text = if (GlobalVars.mqttLink == null)
+		tv04.text = if (GlobalVars.netLink == null)
 			"未连线"
 		else
 			"已连线"
@@ -262,8 +262,8 @@ class MainActivity : Activity() {
 		if (GlobalVars.cannonsPlayerType == PlayerType.NET ||
 			GlobalVars.soldiersPlayerType == PlayerType.NET
 		) {
-			GlobalVars.mqttLink?.close()
-			GlobalVars.mqttLink = null
+			GlobalVars.netLink?.close()
+			GlobalVars.netLink = null
 			AlertDialog.Builder(this)
 				.setTitle("连接方式")
 				.setPositiveButton("互联网") { _, _ ->
@@ -282,8 +282,8 @@ class MainActivity : Activity() {
 		} else {
 			"正在连接网友……" to true
 		}
-		GlobalVars.mqttLink?.close()
-		GlobalVars.mqttLink = null
+		GlobalVars.netLink?.close()
+		GlobalVars.netLink = null
 		MqttLink(initiative) {
 			val dialog = AlertDialog.Builder(this@MainActivity)
 				.setTitle(title)
@@ -306,7 +306,7 @@ class MainActivity : Activity() {
 						this@MainActivity, "成功连接网友。",
 						Toast.LENGTH_SHORT
 					).show()
-					GlobalVars.mqttLink = this
+					GlobalVars.netLink = this
 				}
 			}
 			onError {
@@ -316,8 +316,8 @@ class MainActivity : Activity() {
 						this@MainActivity, "出错：${it.message}",
 						Toast.LENGTH_SHORT
 					).show()
-					GlobalVars.mqttLink?.close()
-					GlobalVars.mqttLink = null
+					GlobalVars.netLink?.close()
+					GlobalVars.netLink = null
 				}
 			}
 			onReceive {

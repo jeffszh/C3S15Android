@@ -30,7 +30,7 @@ object NetworkGameProcessor {
 
 	/** 本地走棋，从这里通知进来。 */
 	fun applyLocalMove(packedChessCells: Long, move: ChessBoardContent.Move) {
-		GlobalVars.mqttLink?.sendData(
+		GlobalVars.netLink?.sendData(
 			gson.toJson(
 				GameMessage(
 					packedChessCells, move

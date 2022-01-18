@@ -16,8 +16,8 @@ class AppMain : Application() {
 		super.onTerminate()
 		MqttDaemon.stop()
 		// NetworkGameProcessor.stop()
-		GlobalVars.mqttLink?.close()
-		GlobalVars.mqttLink = null
+		GlobalVars.netLink?.close()
+		GlobalVars.netLink = null
 	}
 
 }
