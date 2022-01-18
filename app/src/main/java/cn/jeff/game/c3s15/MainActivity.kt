@@ -14,7 +14,7 @@ import cn.jeff.game.c3s15.brain.Brain
 import cn.jeff.game.c3s15.brain.PlayerType
 import cn.jeff.game.c3s15.event.*
 import cn.jeff.game.c3s15.net.MqttDaemon
-import cn.jeff.game.c3s15.net.NetGameState
+import cn.jeff.game.c3s15.net.MqttLink
 import cn.jeff.game.c3s15.net.NetworkGameProcessor
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
@@ -36,6 +36,7 @@ class MainActivity : Activity() {
 //		findViewById<FrameLayout>(R.id.pan01).addView(ChessBoard(this))
 //		val tv01 = findViewById<TextView>(R.id.tv01)
 		tv01.text = GlobalVars.appConf.mainTitle
+		tv01.keepScreenOn = true
 		// instance = this
 	}
 
@@ -98,15 +99,16 @@ class MainActivity : Activity() {
 	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
-	fun onNetGameStateChangedEvent(event: NetGameStateChangedEvent) {
-		updateStatusText4(event.newNetGameState)
+	fun onNetGameStateChangedEvent(event: NetStatusChangeEvent) {
+		updateStatusText4()
 	}
 
 	fun btnClick(view: View) {
 		when (view.id) {
 			R.id.btnRestartGame -> {
 				chessBoard.restartGame()
-				NetworkGameProcessor.restart()
+				// NetworkGameProcessor.restart()
+				showConnectDialogIfNeed()
 			}
 			R.id.btnSettings -> {
 				showSettingsDialog()
@@ -151,7 +153,7 @@ class MainActivity : Activity() {
 		tv03.text = status2
 	}
 
-	private fun updateStatusText4(state: NetGameState) {
+	/*private fun updateStatusText4(state: NetGameState) {
 		val note = when (state) {
 			NetGameState.OFFLINE,
 			NetGameState.GAME_OVER,
@@ -163,6 +165,12 @@ class MainActivity : Activity() {
 		}
 		val txt = "$note  $state"
 		tv04.text = txt
+	}*/
+	private fun updateStatusText4() {
+		tv04.text = if (GlobalVars.mqttLink == null)
+			"未连线"
+		else
+			"已连线"
 	}
 
 	private fun showSettingsDialog() {
@@ -248,6 +256,74 @@ class MainActivity : Activity() {
 					).show()
 				}
 			}.show()
+	}
+
+	private fun showConnectDialogIfNeed() {
+		if (GlobalVars.cannonsPlayerType == PlayerType.NET ||
+			GlobalVars.soldiersPlayerType == PlayerType.NET
+		) {
+			GlobalVars.mqttLink?.close()
+			GlobalVars.mqttLink = null
+			AlertDialog.Builder(this)
+				.setTitle("连接方式")
+				.setPositiveButton("互联网") { _, _ ->
+					showMqttWaitConnectDialog()
+				}
+				.setNeutralButton("蓝牙") { _, _ ->
+					// TODO
+				}
+				.show()
+		}
+	}
+
+	private fun showMqttWaitConnectDialog() {
+		val (title, initiative) = if (GlobalVars.cannonsPlayerType == PlayerType.NET) {
+			"正在等待网友连接……" to false
+		} else {
+			"正在连接网友……" to true
+		}
+		GlobalVars.mqttLink?.close()
+		GlobalVars.mqttLink = null
+		MqttLink(initiative) {
+			val dialog = AlertDialog.Builder(this@MainActivity)
+				.setTitle(title)
+				.setCancelable(false)
+				.setOnDismissListener {
+					if (!connected) {
+						// 若未连接，必须关掉（否则有bug）。
+						close()
+					}
+				}
+				.setNegativeButton("取消") { dialog, _ ->
+					dialog.dismiss()
+				}
+				.show()
+			dialog.setCanceledOnTouchOutside(false)
+			onConnect {
+				runOnUiThread {
+					dialog.dismiss()
+					Toast.makeText(
+						this@MainActivity, "成功连接网友。",
+						Toast.LENGTH_SHORT
+					).show()
+					GlobalVars.mqttLink = this
+				}
+			}
+			onError {
+				runOnUiThread {
+					dialog.dismiss()
+					Toast.makeText(
+						this@MainActivity, "出错：${it.message}",
+						Toast.LENGTH_SHORT
+					).show()
+					GlobalVars.mqttLink?.close()
+					GlobalVars.mqttLink = null
+				}
+			}
+			onReceive {
+				NetworkGameProcessor.onMqttReceived(it)
+			}
+		}
 	}
 
 }

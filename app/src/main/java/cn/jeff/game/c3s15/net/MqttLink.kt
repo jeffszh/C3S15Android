@@ -27,6 +27,8 @@ class MqttLink(initiative: Boolean, op: MqttLink.() -> Unit) : AutoCloseable {
 
 	private val localId get() = MqttDaemon.clientId
 	private var remoteId = ""
+	var connected = false
+		private set
 
 	init {
 		this.op()
@@ -131,6 +133,7 @@ class MqttLink(initiative: Boolean, op: MqttLink.() -> Unit) : AutoCloseable {
 
 	private fun runConnected(remoteId: String) {
 		this.remoteId = remoteId
+		connected = true
 		onConnectFunc()
 		heartBeatThread = thread(name = "MQTT_LINK_HEARTBEAT_THREAD") {
 			runHeartBeat()

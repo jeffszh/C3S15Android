@@ -2,22 +2,46 @@ package cn.jeff.game.c3s15.net
 
 import cn.jeff.game.c3s15.GlobalVars
 import cn.jeff.game.c3s15.board.ChessBoardContent
-import cn.jeff.game.c3s15.brain.PlayerType
-import cn.jeff.game.c3s15.event.ConfigChangedEvent
 import cn.jeff.game.c3s15.event.MoveChessEvent
-import cn.jeff.game.c3s15.event.NetGameStateChangedEvent
 import com.google.gson.GsonBuilder
 import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
-import java.util.concurrent.LinkedBlockingQueue
-import java.util.concurrent.Semaphore
-import java.util.concurrent.SynchronousQueue
-import java.util.concurrent.TimeUnit
-import kotlin.concurrent.thread
 
 object NetworkGameProcessor {
 
+	private val gson = GsonBuilder().setPrettyPrinting().create()
+	private val localChessBoard get() = GlobalVars.chessBoardContent
+
+	/** 收到 MQTT 消息时，从这里通知进来。 */
+	fun onMqttReceived(txtPayload: String) {
+		val msg = try {
+			gson.fromJson(txtPayload, GameMessage::class.java)
+		} catch (e: Exception) {
+			e.printStackTrace()
+			return
+		}
+		// 判断跟本地棋盘是否一致。
+		val newChessBoardContent = localChessBoard.clone()
+		newChessBoardContent.applyMove(msg.lastMove)
+		if (newChessBoardContent.compressToInt64() == msg.packedChessCells) {
+			// 棋盘一致，确认走棋。
+			EventBus.getDefault().post(MoveChessEvent(msg.lastMove, true))
+		}
+	}
+
+	/** 本地走棋，从这里通知进来。 */
+	fun applyLocalMove(packedChessCells: Long, move: ChessBoardContent.Move) {
+		GlobalVars.mqttLink?.sendData(
+			gson.toJson(
+				GameMessage(
+					packedChessCells, move
+				)
+			)
+		)
+	}
+
+}
+
+/*
 	private val gson = GsonBuilder().setPrettyPrinting().create()
 
 	private val gameMsgQueue = LinkedBlockingQueue<GameMessage>()
@@ -307,3 +331,4 @@ object NetworkGameProcessor {
 	}
 
 }
+*/

@@ -15,7 +15,6 @@ import cn.jeff.game.c3s15.GlobalVars
 import cn.jeff.game.c3s15.brain.Brain
 import cn.jeff.game.c3s15.brain.PlayerType
 import cn.jeff.game.c3s15.event.ChessBoardContentChangedEvent
-import cn.jeff.game.c3s15.net.NetGameState
 import cn.jeff.game.c3s15.net.NetworkGameProcessor
 import org.greenrobot.eventbus.EventBus
 import kotlin.concurrent.thread
@@ -251,7 +250,8 @@ class ChessBoard : ViewGroup {
 	fun applyMove(move: ChessBoardContent.Move, byRemote: Boolean = false) {
 		if ((GlobalVars.soldiersPlayerType == PlayerType.NET ||
 					GlobalVars.cannonsPlayerType == PlayerType.NET) &&
-			!byRemote && NetworkGameProcessor.state != NetGameState.LOCAL_TURN
+			!byRemote && GlobalVars.mqttLink == null
+		//NetworkGameProcessor.state != NetGameState.LOCAL_TURN
 		) {
 			return
 		}
