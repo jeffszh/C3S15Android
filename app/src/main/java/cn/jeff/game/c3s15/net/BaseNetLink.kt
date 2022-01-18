@@ -1,5 +1,6 @@
 package cn.jeff.game.c3s15.net
 
+import cn.jeff.game.c3s15.GlobalVars
 import com.google.gson.GsonBuilder
 
 abstract class BaseNetLink(op: BaseNetLink.() -> Unit) : AutoCloseable {
@@ -9,12 +10,11 @@ abstract class BaseNetLink(op: BaseNetLink.() -> Unit) : AutoCloseable {
 		internal val gson = GsonBuilder().setPrettyPrinting().create()
 	}
 
-	protected var onConnectFunc: () -> Unit = {}
-	protected var onReceiveFunc: (String) -> Unit = {}
-	protected var onErrorFunc: (Exception) -> Unit = {}
+	private var onConnectFunc: () -> Unit = {}
+	private var onErrorFunc: (Exception) -> Unit = {}
 
 	var connected = false
-		protected set
+		private set
 
 	init {
 		this.op()
@@ -24,14 +24,26 @@ abstract class BaseNetLink(op: BaseNetLink.() -> Unit) : AutoCloseable {
 		onConnectFunc = func
 	}
 
-	fun onReceive(func: (data: String) -> Unit) {
-		onReceiveFunc = func
-	}
-
 	fun onError(func: (e: Exception) -> Unit) {
 		onErrorFunc = func
 	}
 
 	abstract fun sendData(data: String)
+
+	protected fun doOnReceived(data: String) {
+		NetworkGameProcessor.onDataReceived(data)
+	}
+
+	protected fun doOnConnect() {
+		connected = true
+		GlobalVars.netLink = this
+		onConnectFunc()
+	}
+
+	protected fun doOnError(e: Exception) {
+		GlobalVars.netLink?.close()
+		GlobalVars.netLink = null
+		onErrorFunc(e)
+	}
 
 }

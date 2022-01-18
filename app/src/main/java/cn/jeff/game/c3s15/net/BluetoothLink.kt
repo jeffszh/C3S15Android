@@ -19,7 +19,7 @@ class BluetoothLink(initiative: Boolean, op: BaseNetLink.() -> Unit) : BaseNetLi
 			} catch (e: InterruptedException) {
 				// do nothing
 			} catch (e: Exception) {
-				onErrorFunc(e)
+				doOnError(e)
 			}
 		}
 	}

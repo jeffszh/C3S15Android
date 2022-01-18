@@ -5,7 +5,6 @@ import cn.jeff.game.c3s15.brain.PlayerType
 import cn.jeff.game.c3s15.event.ConfigChangedEvent
 import cn.jeff.game.c3s15.event.NetStatusChangeEvent
 import cn.jeff.game.c3s15.net.BaseNetLink
-import cn.jeff.game.c3s15.net.MqttLink
 import com.google.gson.GsonBuilder
 import org.greenrobot.eventbus.EventBus
 import java.io.FileReader
@@ -91,6 +90,8 @@ object GlobalVars {
 				EventBus.getDefault().post(NetStatusChangeEvent())
 			}
 		}
+
+	val isNetConnected = netLink?.connected ?: false
 
 	const val BLUETOOTH_LINK_UUID = "b35835a0-d88d-4d70-836b-ecab87a5a11b"
 

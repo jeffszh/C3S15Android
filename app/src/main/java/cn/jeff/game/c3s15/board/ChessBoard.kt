@@ -250,7 +250,7 @@ class ChessBoard : ViewGroup {
 	fun applyMove(move: ChessBoardContent.Move, byRemote: Boolean = false) {
 		if ((GlobalVars.soldiersPlayerType == PlayerType.NET ||
 					GlobalVars.cannonsPlayerType == PlayerType.NET) &&
-			!byRemote && GlobalVars.netLink == null
+			!byRemote && !GlobalVars.isNetConnected
 		//NetworkGameProcessor.state != NetGameState.LOCAL_TURN
 		) {
 			return

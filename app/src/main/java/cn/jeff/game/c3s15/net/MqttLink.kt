@@ -30,7 +30,7 @@ class MqttLink(initiative: Boolean, op: BaseNetLink.() -> Unit) : BaseNetLink(op
 			} catch (e: InterruptedException) {
 				// do nothing
 			} catch (e: Exception) {
-				onErrorFunc(e)
+				doOnError(e)
 			}
 		}
 	}
@@ -108,8 +108,7 @@ class MqttLink(initiative: Boolean, op: BaseNetLink.() -> Unit) : BaseNetLink(op
 
 	private fun runConnected(remoteId: String) {
 		this.remoteId = remoteId
-		connected = true
-		onConnectFunc()
+		doOnConnect()
 		heartBeatThread = thread(name = "MQTT_LINK_HEARTBEAT_THREAD") {
 			runHeartBeat()
 		}
@@ -125,14 +124,13 @@ class MqttLink(initiative: Boolean, op: BaseNetLink.() -> Unit) : BaseNetLink(op
 					continue
 				}
 				if (packet.packetType == LinkPacket.PacketType.DATA) {
-					onReceiveFunc(packet.data)
+					doOnReceived(packet.data)
 				}
 			}
 		} catch (e: InterruptedException) {
 			// do nothing
 		} catch (e: Exception) {
-			onErrorFunc(e)
-			close()
+			doOnError(e)
 		}
 	}
 
@@ -145,7 +143,7 @@ class MqttLink(initiative: Boolean, op: BaseNetLink.() -> Unit) : BaseNetLink(op
 		} catch (e: InterruptedException) {
 			// do nothing
 		} catch (e: Exception) {
-			onErrorFunc(e)
+			doOnError(e)
 		}
 	}
 

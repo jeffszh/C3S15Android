@@ -15,7 +15,6 @@ import cn.jeff.game.c3s15.brain.PlayerType
 import cn.jeff.game.c3s15.event.*
 import cn.jeff.game.c3s15.net.MqttDaemon
 import cn.jeff.game.c3s15.net.MqttLink
-import cn.jeff.game.c3s15.net.NetworkGameProcessor
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -167,10 +166,10 @@ class MainActivity : Activity() {
 		tv04.text = txt
 	}*/
 	private fun updateStatusText4() {
-		tv04.text = if (GlobalVars.netLink == null)
-			"未连线"
-		else
+		tv04.text = if (GlobalVars.isNetConnected)
 			"已连线"
+		else
+			"未连线"
 	}
 
 	private fun showSettingsDialog() {
@@ -306,7 +305,6 @@ class MainActivity : Activity() {
 						this@MainActivity, "成功连接网友。",
 						Toast.LENGTH_SHORT
 					).show()
-					GlobalVars.netLink = this
 				}
 			}
 			onError {
@@ -316,12 +314,7 @@ class MainActivity : Activity() {
 						this@MainActivity, "出错：${it.message}",
 						Toast.LENGTH_SHORT
 					).show()
-					GlobalVars.netLink?.close()
-					GlobalVars.netLink = null
 				}
-			}
-			onReceive {
-				NetworkGameProcessor.onMqttReceived(it)
 			}
 		}
 	}
