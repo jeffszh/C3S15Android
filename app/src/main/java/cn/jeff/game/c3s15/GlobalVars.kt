@@ -91,4 +91,6 @@ object GlobalVars {
 			}
 		}
 
+	const val BLUETOOTH_LINK_UUID = "b35835a0-d88d-4d70-836b-ecab87a5a11b"
+
 }

@@ -1,11 +1,10 @@
 package cn.jeff.game.c3s15.net
 
-import com.google.gson.GsonBuilder
 import java.io.IOException
 import java.util.*
 import kotlin.concurrent.thread
 
-class MqttLink(initiative: Boolean, op: MqttLink.() -> Unit) : AutoCloseable {
+class MqttLink(initiative: Boolean, op: MqttLink.() -> Unit) : BaseNetLink() {
 
 //	private const val TXT_OFFLINE = "离线"
 //	private const val TXT_WAITING_CONNECTION = "正在等待连接……"
@@ -13,22 +12,11 @@ class MqttLink(initiative: Boolean, op: MqttLink.() -> Unit) : AutoCloseable {
 //	private const val TXT_CONN_DROP = "掉线了……"
 //	private const val TXT_CONNECTED = "已跟对方建立连接。"
 
-	companion object {
-		private const val LINK_TIMEOUT = 8000L
-		private val gson = GsonBuilder().setPrettyPrinting().create()
-	}
-
-	private var onConnectFunc: () -> Unit = {}
-	private var onReceiveFunc: (String) -> Unit = {}
-	private var onErrorFunc: (Exception) -> Unit = {}
-
 	private var workThread: Thread? = null
 	private var heartBeatThread: Thread? = null
 
 	private val localId get() = MqttDaemon.clientId
 	private var remoteId = ""
-	var connected = false
-		private set
 
 	init {
 		this.op()
@@ -48,18 +36,6 @@ class MqttLink(initiative: Boolean, op: MqttLink.() -> Unit) : AutoCloseable {
 		}
 	}
 
-	fun onConnect(func: () -> Unit) {
-		onConnectFunc = func
-	}
-
-	fun onReceive(func: (data: String) -> Unit) {
-		onReceiveFunc = func
-	}
-
-	fun onError(func: (e: Exception) -> Unit) {
-		onErrorFunc = func
-	}
-
 	override fun close() {
 		workThread?.interrupt()
 		workThread = null
@@ -67,7 +43,7 @@ class MqttLink(initiative: Boolean, op: MqttLink.() -> Unit) : AutoCloseable {
 		heartBeatThread = null
 	}
 
-	fun sendData(data: String) {
+	override fun sendData(data: String) {
 		sendPacket(LinkPacket.PacketType.DATA, localId, remoteId, data)
 	}
 
