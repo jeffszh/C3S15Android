@@ -15,6 +15,7 @@ import cn.jeff.game.c3s15.brain.PlayerType
 import cn.jeff.game.c3s15.event.*
 import cn.jeff.game.c3s15.net.BaseNetLink
 import cn.jeff.game.c3s15.net.BluetoothLink
+import cn.jeff.game.c3s15.net.BluetoothLink.Companion.selectDeviceByDialog
 import cn.jeff.game.c3s15.net.MqttDaemon
 import cn.jeff.game.c3s15.net.MqttLink
 import kotlinx.android.synthetic.main.activity_main.*
@@ -274,10 +275,15 @@ class MainActivity : Activity() {
 					showWaitConnectDialog { initiative, op ->
 						MqttLink(initiative, op)
 					}
+					// 留条后路：当使用过互联网对战，清空蓝牙朋友。
+					GlobalVars.appConf.bluetoothFriend = ""
+					GlobalVars.saveConf(configFilename)
 				}
 				.setNeutralButton("蓝牙") { _, _ ->
-					showWaitConnectDialog { initiative, op ->
-						BluetoothLink(initiative, op)
+					selectDeviceByDialog(configFilename) { dev ->
+						showWaitConnectDialog { initiative, op ->
+							BluetoothLink(dev, initiative, op)
+						}
 					}
 				}
 				.show()

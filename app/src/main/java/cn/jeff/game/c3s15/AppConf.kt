@@ -9,4 +9,6 @@ class AppConf {
 
 	var mqttChannelNum = 1234
 
+	var bluetoothFriend = ""
+
 }
