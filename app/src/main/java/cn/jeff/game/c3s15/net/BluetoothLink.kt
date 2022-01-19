@@ -125,6 +125,13 @@ class BluetoothLink(
 
 	private fun runConnected() {
 		doOnConnect()
+		val input = socket?.inputStream ?: return
+		val buffer = ByteArray(2048)
+		do {
+			val recLen = input.read(buffer)
+			val txt = String(buffer, 0, recLen, Charsets.UTF_8)
+			doOnReceived(txt)
+		} while (recLen > 0)
 	}
 
 	override fun sendData(data: String) {
