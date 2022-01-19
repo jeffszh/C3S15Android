@@ -34,11 +34,11 @@
 		<path
 			android:fillColor="#EFF"
 			android:pathData="
-				M40,49
-				A10,8 1,1,0 40,50
+				M42,49
+				A12,10 1,1,0 42,50
 				z
-				M60,49
-				A10,8 1,1,1 60,50
+				M58,49
+				A12,10 1,1,1 58,50
 				z
 				"
 			android:strokeWidth="1"

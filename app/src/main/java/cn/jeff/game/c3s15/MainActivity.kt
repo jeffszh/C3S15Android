@@ -113,6 +113,7 @@ class MainActivity : Activity() {
 			R.id.btnRestartGame -> {
 				chessBoard.restartGame()
 				// NetworkGameProcessor.restart()
+				updateStatusText4()
 				showConnectDialogIfNeed()
 			}
 			R.id.btnSettings -> {
