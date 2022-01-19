@@ -34,7 +34,7 @@ object GlobalVars {
 		}
 	}
 
-	fun loadConf(filename: String = confFilename) {
+	fun loadConf(filename: String) {
 		try {
 //			@Suppress("DEPRECATION")
 //			FileReader(
@@ -49,7 +49,7 @@ object GlobalVars {
 		}
 	}
 
-	fun saveConf(filename: String = confFilename) {
+	fun saveConf(filename: String) {
 //		@Suppress("DEPRECATION")
 //		FileWriter(
 //			Environment.getExternalStorageDirectory().absolutePath

@@ -29,6 +29,9 @@ class MainActivity : Activity() {
 		// var instance: MainActivity? = null
 	}
 
+	private val configFilename
+		get() = getExternalFilesDir(null)!!.path + "/" + GlobalVars.confFilename
+
 //	val tv01 = findViewById<TextView>(R.id.tv01)
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +46,7 @@ class MainActivity : Activity() {
 
 	override fun onStart() {
 		super.onStart()
-		val fn = getExternalFilesDir(null)!!.path + "/" + GlobalVars.confFilename
+		val fn = configFilename
 		GlobalVars.loadConf(fn)
 		GlobalVars.saveConf(fn)
 		EventBus.getDefault().register(this)
@@ -225,7 +228,7 @@ class MainActivity : Activity() {
 				val num = txt.toIntOrNull() ?: -1
 				if (num in 0..99999) {
 					MqttDaemon.channelNum = num
-					GlobalVars.saveConf()
+					GlobalVars.saveConf(configFilename)
 				} else {
 					// 安卓真蠢！要点击按钮不关闭，只能通过非常手段才能做到，不理了。
 					Toast.makeText(
@@ -248,7 +251,7 @@ class MainActivity : Activity() {
 				val num = txt.toIntOrNull() ?: -1
 				if (num in 1..9) {
 					GlobalVars.appConf.aiDepth = num
-					GlobalVars.saveConf()
+					GlobalVars.saveConf(configFilename)
 				} else {
 					// 安卓真蠢！要点击按钮不关闭，只能通过非常手段才能做到，不理了。
 					Toast.makeText(
