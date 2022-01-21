@@ -111,6 +111,8 @@ class MainActivity : Activity() {
 	fun btnClick(view: View) {
 		when (view.id) {
 			R.id.btnRestartGame -> {
+				println(tv01.textSize)
+				println(tv02.textSize)
 				chessBoard.restartGame()
 				// NetworkGameProcessor.restart()
 				updateStatusText4()

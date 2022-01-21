@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<dimen name="cell_size">100</dimen>
+	<dimen name="title_text_size">28sp</dimen>
+	<dimen name="label_text_size">18sp</dimen>
 </resources>

@@ -141,17 +141,28 @@ class ChessBoard : ViewGroup {
 	override fun onDraw(canvas: Canvas?) {
 		canvas ?: return
 		super.onDraw(canvas)
+		val border = cellSize * 0.2F
 		for (i in 0..5) {
 			gridPen.strokeWidth = if (i == 0 || i == 5) 5F else 3F
-			val d = ((i + 0.2) * cellSize).toFloat()
+			val d = (i * cellSize) + border
 			canvas.drawLine(
-				d, cellSize * 0.2F,
-				d, width.toFloat() - cellSize * 0.2F, gridPen
+				d, border,
+				d, width.toFloat() - border, gridPen
 			)
 			canvas.drawLine(
-				cellSize * 0.2F, d,
-				width.toFloat() - cellSize * 0.2F, d, gridPen
+				border, d,
+				width.toFloat() - border, d, gridPen
 			)
+		}
+		val letters = ('A'..'E').toList()
+		val numbers = ('1'..'5').toList()
+		gridPen.textSize = cellSize / 6F
+		for (i in 0..4) {
+			val d = ((i + .5) * cellSize).toFloat()
+			canvas.drawText(letters[i].toString(), d, 0F, gridPen)
+			canvas.drawText(letters[i].toString(), d, width - .5F, gridPen)
+			canvas.drawText(numbers[i].toString(), 0F, d + 5.0F, gridPen)
+			canvas.drawText(numbers[i].toString(), width - 10.0F, d + 5.0F, gridPen)
 		}
 	}
 
