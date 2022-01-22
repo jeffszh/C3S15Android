@@ -72,6 +72,19 @@
 		android:gravity="center|end">
 
 		<Button
+			android:id="@+id/btnRuleDescription"
+			style="?android:attr/buttonStyle"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="btnClick"
+			android:text="@string/rule_description" />
+
+		<Space
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="10" />
+
+		<Button
 			android:id="@+id/btnAiDepth"
 			style="?android:attr/buttonStyle"
 			android:layout_width="wrap_content"

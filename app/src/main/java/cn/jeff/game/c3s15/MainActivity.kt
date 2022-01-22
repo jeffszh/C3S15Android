@@ -28,6 +28,12 @@ class MainActivity : Activity() {
 	companion object {
 		private const val LOG_TAG = "MainActivity"
 		// var instance: MainActivity? = null
+
+		private const val ruleDescription = """游戏为炮先行走子，双方轮流走，每次只能走一个子。
+炮隔一个空格可以吃掉一个兵，注意是空格，中间有子不行。除了吃兵之外，也可单纯移动一格。
+兵每次移动一格，兵没有吃子能力。
+炮吃掉最后一个兵则炮胜利；兵挤住了炮，让所有炮无法移动则兵胜利。
+"""
 	}
 
 	private val configFilename
@@ -126,6 +132,9 @@ class MainActivity : Activity() {
 			}
 			R.id.btnAiDepth -> {
 				showChangeAiDepthDialog()
+			}
+			R.id.btnRuleDescription -> {
+				showRuleDescription()
 			}
 		}
 	}
@@ -338,6 +347,16 @@ class MainActivity : Activity() {
 				}
 			}
 		}
+	}
+
+	private fun showRuleDescription() {
+		val txt = ruleDescription.replace("炮", GlobalVars.appConf.cannonText)
+			.replace("兵", GlobalVars.appConf.soldierText)
+		AlertDialog.Builder(this)
+			.setTitle("游戏规则")
+			.setMessage(txt)
+			.setPositiveButton("确定") { _, _ -> }
+			.show()
 	}
 
 }

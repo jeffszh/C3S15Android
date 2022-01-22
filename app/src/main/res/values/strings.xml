@@ -6,4 +6,5 @@
 	<string name="settings">设置</string>
 	<string name="channel">通道</string>
 	<string name="ai_depth">AI强度</string>
+	<string name="rule_description">规则说明</string>
 </resources>

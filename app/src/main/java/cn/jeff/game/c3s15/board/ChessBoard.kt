@@ -158,11 +158,17 @@ class ChessBoard : ViewGroup {
 		val numbers = ('1'..'5').toList()
 		gridPen.textSize = cellSize / 6F
 		for (i in 0..4) {
-			val d = ((i + .5) * cellSize).toFloat()
-			canvas.drawText(letters[i].toString(), d, 0F, gridPen)
-			canvas.drawText(letters[i].toString(), d, width - .5F, gridPen)
-			canvas.drawText(numbers[i].toString(), 0F, d + 5.0F, gridPen)
-			canvas.drawText(numbers[i].toString(), width - 10.0F, d + 5.0F, gridPen)
+			val d = (i + .6F) * cellSize
+			canvas.drawText(letters[i].toString(), d, .16F * cellSize, gridPen)
+			canvas.drawText(letters[i].toString(), d, width - .04F * cellSize, gridPen)
+			canvas.drawText(
+				numbers[i].toString(),
+				.04F * cellSize, d + .15F * cellSize, gridPen
+			)
+			canvas.drawText(
+				numbers[i].toString(),
+				width - .15F * cellSize, d + .15F * cellSize, gridPen
+			)
 		}
 	}
 
